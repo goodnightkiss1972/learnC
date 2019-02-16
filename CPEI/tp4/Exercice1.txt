@@ -1,0 +1,7 @@
+Exercice 1 :
+
+(1) return
+(2) printf
+(3) return (autrement dit ici terminer main par un return)
+
+
