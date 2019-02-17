@@ -16,7 +16,7 @@ int fib(int n)
     printf("%d\n", n); // ne termine jamais car n devient negatif
     if (n < 0)
     {
-        return -1;
+        return -1; // arrete la recursion pour fib(-1) appelee en // de fib(0)
     }
     if (n == 0 || n == 1)
     {
