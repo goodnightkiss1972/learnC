@@ -1,7 +1,7 @@
 #include <stdio.h>
 // l'utilisation du tableau n'est pas forcement une bonne idee
 // car on trimbale la taille du tableau [3] et le degre du polynome à plusieurs endroits
-// alors que mathematiquement ces deux notions sont liées. 
+// alors que ces deux notions sont liées. 
 double horner_rec(int i, double x, int degre, double coefs[3]);
 
 int main()
