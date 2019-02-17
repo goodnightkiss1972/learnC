@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .DS_Store
 booleens
 cocycliques
@@ -13,3 +14,12 @@ polynome-horner_rec-modifie
 source.bin
 source.txt
 tri
+=======
+CPEI/tp3/exo2.exe
+CPEI/tp1/go.cmd
+CPEI/tp1/tp1_exo1.exe
+CPEI/tp1/tp1_exo3bis.exe
+CPEI/tp3/exo1.exe
+CPEI/tp4/tp4.exe
+CPEI/tp4/Exercice3.exe
+>>>>>>> 59f180c876bafa1d277f94805a863dfa0295e03c

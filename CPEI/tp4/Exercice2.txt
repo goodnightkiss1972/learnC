@@ -1,0 +1,10 @@
+Exercice 2 :
+
+(1) VRAI pour la première affirmation; FAUX pour la deuxième, a doit etre int
+(2) VRAI
+(3) FAUX
+(4) FAUX
+(5) VRAI
+(6) VRAI
+(7) VRAI
+
