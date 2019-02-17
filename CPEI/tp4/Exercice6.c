@@ -27,7 +27,8 @@ int fib_iteration(int n)
     {
         fibn1 = 1;
         fibn2 = 1;
-        for (i = 1; i < n;i++){
+        for (i = 1; i < n; i++)
+        {
             fibn = fibn1 + fibn2;
             fibn2 = fibn1;
             fibn1 = fibn;

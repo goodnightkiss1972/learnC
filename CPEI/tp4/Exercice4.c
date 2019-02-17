@@ -33,8 +33,10 @@ int pgcd_iteration(int a, int b)
     {
         minab = b;
     }
-    for (i = 1;i <= minab;i++) {
-        if((a % i == b % i) && ((a % i) == 0) && ((b % i) == 0)) {
+    for (i = 1; i <= minab; i++)
+    {
+        if ((a % i == b % i) && ((a % i) == 0) && ((b % i) == 0))
+        {
             pgcd = i;
         }
     }
@@ -55,7 +57,8 @@ int pgcd_recursion(int a, int b)
     }
     reste = a % b;
     printf("reste de %d %% %d = %d\n", a, b, reste);
-    if (reste == 0) {
+    if (reste == 0)
+    {
         return b;
     }
     else
