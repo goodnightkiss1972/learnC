@@ -25,6 +25,6 @@ double carres(double a, int n)
     }
     {
         printf("carres simples - multiplication \n");
-        return (a * carres(a, n-1));
+        return (a * carres(a, n - 1));
     }
 }
