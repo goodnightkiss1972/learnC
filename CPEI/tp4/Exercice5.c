@@ -27,19 +27,3 @@ int fib(int n)
         return (fib(n - 2) + fib(n - 1));
     }
 }
-
-/*
-int f(int nbImpair)
-{
-    int i = 0, depart = 1, resultat = 0;
-    if (nbImpair < 1)
-    {
-        return 0;
-    }
-    for (i = 0; i < nbImpair; i++)
-    {
-        resultat = resultat + (depart + i * 2);
-    }
-    return resultat;
-}
-*/
