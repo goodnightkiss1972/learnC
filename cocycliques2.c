@@ -16,6 +16,7 @@ typedef struct
 
 void montrePoints(pts listeAMontrer[nbPoints]);
 equationDroite *fabriqueEquationDroite(pts p1, pts p2);
+void fabriqueEquationDroite2(pts p1, pts p2, equationDroite *eq);
 int verifiePtsSurEquationDroite(pts p1, equationDroite eq);
 
 int main()
@@ -40,6 +41,13 @@ int main()
     printf("verification point 3 sur droite (01) %d\n", verifiePtsSurEquationDroite(liste[3], *equation01));
     // verifions que le 2ieme point est sur la droite du 1er et du 4 ieme en une seule ligne
     printf("verification point 1 sur droite (03): %d\n", verifiePtsSurEquationDroite(liste[1], *fabriqueEquationDroite(liste[0], liste[3])));
+
+    // autre technique en utlisant la fonction "2"
+    equationDroite eq01;
+    fabriqueEquationDroite2(liste[0], liste[1], &eq01);
+    printf("En dehors de la fonction 2 :\n");
+    printf("La droite passant par les points (%f,%f) et (%f,%f) est : %f X + (%f) Y + (%f) = 0\n", liste[0].x, liste[0].y, liste[1].x, liste[1].y, eq01.a, eq01.b, eq01.c);
+
 }
 
 void montrePoints(pts listeAMontrer[nbPoints])
@@ -55,12 +63,29 @@ void montrePoints(pts listeAMontrer[nbPoints])
 equationDroite *fabriqueEquationDroite(pts p1, pts p2)
 {
     static equationDroite equation;
+    // l'utilisation d'une variable statique n'est pas une super idee
+    // au premier appel de la fonction la variable "equation" va rester en mémoire
+    // visible depuis l'appelant.
+    // Même si ici on reset "equation" à chaque fois c'est un peu dommage de recycler la variable
+    // on ne prend pas de risque ici toutefois
     equation.a = p1.y - p2.y;               //y1 - y2 = a
     equation.b = p2.x - p1.x;               //x2 - x1 = b
     equation.c = p2.y * p1.x - p1.y * p2.x; //y2 * x1 - y1 * x2 = c
     printf("La droite passant par les points (%f,%f) et (%f,%f) est : %f X + (%f) Y + (%f) = 0\n", p1.x, p1.y, p2.x, p2.y, equation.a, equation.b, equation.c);
     return (&equation);
     // question : comment gerer si p1 = p2 car si les points sont confondus alors que doit devenir notre equation ?
+}
+
+void fabriqueEquationDroite2(pts p1, pts p2, equationDroite *ret)
+{
+    // Enorme avantage de ce type d'ecriture : on peut retourner plus d'une variable en sortie
+    // c'est a dire que la variable passee est modifiee par la fonction mais surtout on pourrait
+    // en avoir plusieurs...
+    equationDroite this;
+    this.a = p1.y - p2.y;               //y1 - y2 = a;
+    this.b = p2.x - p1.x;               //x2 - x1 = b;
+    this.c = p2.y * p1.x - p1.y * p2.x; //y2 * x1 - y1 * x2 = c
+    *ret = this;
 }
 
 int verifiePtsSurEquationDroite(pts p, equationDroite eq)
