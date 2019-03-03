@@ -38,3 +38,6 @@ variables_copie.exe
 variables_reference.exe
 variables_tableau.exe
 cocycliques2.exe
+GeoPlan/essai.exe
+GeoPlan/cartesien.o
+GeoPlan/cartesien.so
