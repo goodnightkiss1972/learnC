@@ -13,5 +13,6 @@ typedef struct {
 } droite;
 
 double distance(pt A, pt B);
+void equationDroite(pt A, pt B, droite *d);
 
 #endif //__cartesien_h_
