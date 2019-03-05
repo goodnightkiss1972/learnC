@@ -16,8 +16,8 @@ typedef struct
 
 typedef struct
 {
-    double u1;
-    double u2;
+    double i;
+    double j;
 } vecteur;
 
 double distance2pt(pt A, pt B)
@@ -35,24 +35,41 @@ void droite2pt(pt A, pt B, droite *d, vecteur *v)
     *d = this;
 
     vecteur that;
-    that.u1 = -1 * this.b;
-    that.u2 = this.a;
+    that.i = -1 * this.b;
+    that.j = this.a;
     *v = that;
 }
 
 void vecteurDroite(droite d, vecteur *v)
 {
     vecteur this;
-    this.u1 = -1 * d.b;
-    this.u2 = d.a;
+    this.i = -1 * d.b;
+    this.j = d.a;
     *v = this;
 }
 
 void droite1ptVecteur(pt A, vecteur v, droite *d)
 {
     droite this;
-    this.a = v.u2;
-    this.b = -1 * v.u1;
-    this.c = (v.u1 * A.y) - (v.u2 * A.x);
+    this.a = v.j;
+    this.b = -1 * v.i;
+    this.c = (v.i * A.y) - (v.j * A.x);
     *d = this;
+}
+
+double normeVecteur(vecteur u)
+{
+    return (sqrt(pow(u.i, 2) + pow(u.j, 2)));
+}
+
+double produitScalaire(vecteur u, vecteur v, double *cosalpha)
+{
+    double produit = (u.i * v.i) + (u.j * v.j);
+    double normu = normeVecteur(u);
+    double normv = normeVecteur(v);
+    if (normu != 0 && normv != 0)
+    {
+        *cosalpha = produit / (normu * normv);
+    }
+    return produit;
 }
