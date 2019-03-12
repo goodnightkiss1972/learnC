@@ -1,8 +1,11 @@
 #include <stdio.h>
+// https://fr.wikipedia.org/wiki/Algorithme_de_tri
 
 void main()
 {
     int table[10] = {8, 18, 4, 3, 20, 13, 5, 2, 15, 5};
+//    int table[10] = {2, 18, 4, 3, 20, 13, 5, 8, 15, 5};
+//    int table[10] = {8, 4, 3, 5, 2, 5, 15, 13, 20, 18};
     int n = sizeof(table) / sizeof(table[0]); // technique simple pour connaitre la taille d'un tableau
     int temoin = 0;
     do
