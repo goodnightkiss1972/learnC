@@ -31,7 +31,9 @@ void affiche_tableau(int table[], int taille) {
 }
 
 int indice_plus_petit_apres_i(int t[], int len, int i) {
-    int indice, minimum = 9999;
+    // la subtilite est de bien initialiser indice et minimum
+    // car la recherche peut ne pas trouver de minimum apres i
+    int indice = i, minimum = t[i];
     for (int j = i; j < len; j++) {
         if (t[j] < minimum) {
             indice = j;
