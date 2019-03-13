@@ -1,7 +1,8 @@
 #include <stdio.h>
 
+#define taille 10
+
 int main() {
-    int taille = 10;
     int tableau[taille];
     for (int i = 0; i < taille; i++) {
         tableau[i] = 0;

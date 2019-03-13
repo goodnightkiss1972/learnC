@@ -1,16 +1,16 @@
 #include <stdio.h>
 
+#define len 6
 void affiche_tableau(int table[], int taille);
 void copie_tableau(int source[], int t_source, int dest[], int t_dest);
 
 int main() {
-    int tab1[6] = {10, 20, 30, 40, 50, 60};
-    int t_tab1 = sizeof(tab1) / sizeof(tab1[0]);
-    affiche_tableau(tab1, t_tab1);
+    int tab1[len] = {10, 20, 30, 40, 50, 60};
+    affiche_tableau(tab1, len);
 
-    int tab2[t_tab1];
-    copie_tableau(tab1, t_tab1, tab2, t_tab1);
-    affiche_tableau(tab2, t_tab1);
+    int tab2[len];
+    copie_tableau(tab1, len, tab2, len);
+    affiche_tableau(tab2, len);
 }
 
 void affiche_tableau(int table[], int taille) {

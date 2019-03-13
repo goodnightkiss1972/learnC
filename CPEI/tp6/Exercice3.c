@@ -1,10 +1,12 @@
 #include <stdio.h>
 
+#define len 6
+
 int somme_tableau(int tableau[], int taille);
 
 int main() {
-    int tab1[6] = {1, 4, 5, 5, 2, 3};
-    printf("Somme des elements de tab1 = %d", somme_tableau(tab1, sizeof(tab1)/sizeof(tab1[0])));
+    int tab1[len] = {1, 4, 5, 5, 2, 3};
+    printf("Somme des elements de tab1 = %d", somme_tableau(tab1, len));
     return 0;
 }
 

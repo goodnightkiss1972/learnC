@@ -1,11 +1,12 @@
 #include <stdio.h>
 
+#define taille_tableau 10
+
 void affiche_tableau(int table[], int taille);
 int indice_plus_petit_apres_i(int t[], int len, int i);
 
 int main() {
-    int tableau[10] = {4, 3, 0, 6, 18, 10, 4, 7, 21, 9};
-    int taille_tableau = sizeof(tableau) / sizeof(tableau[0]);
+    int tableau[taille_tableau] = {4, 3, 0, 6, 18, 10, 4, 7, 21, 9};
     affiche_tableau(tableau, taille_tableau);
     for (int i = 0; i < taille_tableau; i++) {
         int imini, temp;
