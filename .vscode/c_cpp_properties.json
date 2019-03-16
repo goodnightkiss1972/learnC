@@ -7,7 +7,8 @@
                 "C:/TDM-GCC-64/x86_64-w64-mingw32/include",
                 "C:/TDM-GCC-64/x86_64-w64-mingw32/include",
                 "C:/TDM-GCC-64/x86_64-w64-mingw32/include",
-                "${workspaceFolder}/GeoPlan"
+                "${workspaceFolder}/GeoPlan",
+                "C:/TDM-GCC-64/x86_64-w64-mingw32/include"
             ],
             "defines": [
                 "_DEBUG",
