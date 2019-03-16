@@ -48,10 +48,9 @@ int main()
     int indice = 0; // l'indice va etre ecrit dans le tableau cases
     int position = 0;
     int casecourante = 0;
-    int lignecasecourante = 0;
     do
     {
-        printf("ligne %2d case %2d position %2d indice %2d\n", lignecasecourante, casecourante, position, indice);
+        //printf("case %2d position %2d indice %2d\n", casecourante, position, indice);
         cases[casecourante][position] = indice;
         indice++;
         position++;
@@ -60,66 +59,28 @@ int main()
             position = position - cotecase;
             casecourante++;
         }
-        else
-        {
-        }
         if ((indice % cotecase == 0) && (position % cotecase == 0) && (casecourante % cotecase == 0))
         {
             casecourante = casecourante - cotecase;
             position = position + cotecase;
         }
-        else
+        if (indice % (len / cotecase) == 0)
         {
+            casecourante = casecourante + cotecase;
+            position = 0;
         }
 
-    } while (indice <= 53);
+    } while (indice <= len);
 
-    for (int k = 0; k < 9; k++)
+    for (int j = 0; j < cote; j++)
     {
-        printf("[%2d] ", cases[0][k]);
+        printf("Indices de la case %d :", j);
+        for (int k = 0; k < cote; k++)
+        {
+            printf("[%2d] ", cases[j][k]);
+        }
+        printf("\n");
     }
-    printf("\n");
-    for (int k = 0; k < 9; k++)
-    {
-        printf("[%2d] ", cases[1][k]);
-    }
-    printf("\n");
-    for (int k = 0; k < 9; k++)
-    {
-        printf("[%2d] ", cases[2][k]);
-    }
-    printf("\n");
-    for (int k = 0; k < 9; k++)
-    {
-        printf("[%2d] ", cases[3][k]);
-    }
-    printf("\n");
-    for (int k = 0; k < 9; k++)
-    {
-        printf("[%2d] ", cases[4][k]);
-    }
-    printf("\n");
-    for (int k = 0; k < 9; k++)
-    {
-        printf("[%2d] ", cases[5][k]);
-    }
-    printf("\n");
-    for (int k = 0; k < 9; k++)
-    {
-        printf("[%2d] ", cases[6][k]);
-    }
-    printf("\n");
-    for (int k = 0; k < 9; k++)
-    {
-        printf("[%2d] ", cases[7][k]);
-    }
-    printf("\n");
-    for (int k = 0; k < 9; k++)
-    {
-        printf("[%2d] ", cases[8][k]);
-    }
-    printf("\n");
-
     return 0;
 }
 
