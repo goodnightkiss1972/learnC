@@ -1,16 +1,19 @@
 #include <stdio.h>
 #include <math.h>
 
+int len; // taille du tableau modelisant la grille
+int n; // taille du cote d'un bloc
+int cotegrille; // longueur d'un cote de la grille
+int cotebloc; // longeur d'un bloc
+
 void print_grid(int t[], int len);
-int missing_on_line(int val, int rang, int t[], int len);
-int missing_on_column(int val, int rang, int t[], int len);
-int missing_on_cell(int val, int rang, int t[], int len);
+
+int manque_sur_ligne(int val, int rang, int t[]);
+int manque_sur_colonne(int val, int rang, int t[]);
+int manque_dans_bloc(int val, int rang, int t[], int b[][cotegrille]);
 
 int main()
 {
-    int n;   // taille du cote d'une cellule
-    int len; // taille du tableau modelisant la grille
-
     printf("Entrez la taille de la grille (minimum 2) :");
     scanf("%d", &n);
     if (n < 2)
@@ -18,10 +21,11 @@ int main()
         printf("ERREUR: La grille est trop petite (minimum 2)...");
         return 0;
     }
+
     // un tableau avec un dimension devra contenir n puissance 4 cellules.
     len = pow(n, 4);
-    int cote = sqrt(len);      // longueur d'un cote de la grille
-    int cotecase = sqrt(cote); // longeur d'une case
+    cotegrille = sqrt(len);      // longueur d'un cote de la grille
+    cotebloc = sqrt(cotegrille); // longeur d'un bloc
 
     int grille[len]; // la grille en tableau a une seule dimension
     for (int i = 0; i < len; i++)
@@ -34,63 +38,68 @@ int main()
         grille[3] = 3;
         grille[5] = 2;
         grille[7] = 1;
+        grille[9] = 3; //erreur
+        grille[10] = 4;
+        grille[12] = 3;
     }
-    //    print_grid(grille, len);
-    /*
-    printf("val=%d sur position=%d resultat:%d\n", 1, 3, missing_on_column(1, 3, grille, len));
-    printf("val=%d sur position=%d resultat:%d\n", 2, 3, missing_on_column(2, 3, grille, len));
-    printf("val=%d sur position=%d resultat:%d\n", 2, 5, missing_on_column(2, 5, grille, len));
-    printf("val=%d sur position=%d resultat:%d\n", 2, 14, missing_on_column(2, 14, grille, len));
-*/
+    print_grid(grille, len);
+
     // creation des cases de la grille remplies avec les indices
-    // il nous faut "cote" case, chaque case contiendra "cote" indices
-    int cases[cote][cote];
-    int indice = 0; // l'indice va etre ecrit dans le tableau cases
+    // il nous faut "cotegrille" blocs, chaque bloc contiendra "cotegrille" indices
+    int blocs[cotegrille][cotegrille];
+    int indice = 0; // l'indice va etre ecrit dans le tableau blocs
     int position = 0;
-    int casecourante = 0;
+    int bloc = 0;
     do
     {
-        //printf("case %2d position %2d indice %2d\n", casecourante, position, indice);
-        cases[casecourante][position] = indice;
+        //printf("bloc %2d position %2d indice %2d\n", bloc, position, indice);
+        blocs[bloc][position] = indice;
         indice++;
         position++;
-        if (position % cotecase == 0)
+        if (position % cotebloc == 0)
         {
-            position = position - cotecase;
-            casecourante++;
+            position = position - cotebloc;
+            bloc++;
         }
-        if ((indice % cotecase == 0) && (position % cotecase == 0) && (casecourante % cotecase == 0))
+        if ((indice % cotebloc == 0) && (position % cotebloc == 0) && (bloc % cotebloc == 0))
         {
-            casecourante = casecourante - cotecase;
-            position = position + cotecase;
+            bloc = bloc - cotebloc;
+            position = position + cotebloc;
         }
-        if (indice % (len / cotecase) == 0)
+        if (indice % (len / cotebloc) == 0)
         {
-            casecourante = casecourante + cotecase;
+            bloc = bloc + cotebloc;
             position = 0;
         }
 
     } while (indice <= len);
 
-    for (int j = 0; j < cote; j++)
+    // verification du rendu des blocs
+    for (int j = 0; j < cotegrille; j++)
     {
-        printf("Indices de la case %d :", j);
-        for (int k = 0; k < cote; k++)
+        printf("Indices du bloc %d :", j);
+        for (int k = 0; k < cotegrille; k++)
         {
-            printf("[%2d] ", cases[j][k]);
+            printf("[%2d] ", blocs[j][k]);
         }
         printf("\n");
     }
+
+    printf(" %d\n", manque_sur_ligne(2, 1, grille)); // devrait etre vrai donc = 1
+    printf(" %d\n", manque_sur_ligne(4, 10, grille)); // devrait etre faux donc = 0
+/*
+    manque_dans_bloc(1, 3, grille, blocs);
+    manque_dans_bloc(2, 14, grille, blocs);
+*/
     return 0;
 }
 
 void print_grid(int t[], int len)
 {
     int i = 1;
-    int l = sqrt(len);
     while (i < len + 1)
     {
-        if (sqrt(len) <= 9)
+        if (cotegrille <= 9)
         {
             printf("%d ", t[i - 1]);
         }
@@ -100,7 +109,7 @@ void print_grid(int t[], int len)
         }
         if (i > 0)
         {
-            if ((i % l) == 0)
+            if ((i % cotegrille) == 0)
             {
                 printf("\n");
             }
@@ -109,12 +118,12 @@ void print_grid(int t[], int len)
     }
 }
 
-int missing_on_line(int val, int rang, int t[], int len)
+int manque_sur_ligne(int val, int rang, int t[])
 {
-    int cote = sqrt(len);
-    int borne_inf = (rang / cote) * cote;
-    int borne_sup = ((rang / cote) * cote) + cote - 1;
+    int borne_inf = (rang / cotegrille) * cotegrille;
+    int borne_sup = ((rang / cotegrille) * cotegrille) + cotegrille - 1;
     //printf("inf %d / sup %d\n", borne_inf, borne_sup);
+    printf("Test manque_sur_ligne la val %d en rang %d :", val, rang);
     for (int i = borne_inf; i <= borne_sup; i++) // cette boucle constitue la ligne
     {
         if (t[i] == val)
@@ -125,24 +134,23 @@ int missing_on_line(int val, int rang, int t[], int len)
     return 1; // (vrai) val est absente de la ligne
 }
 
-int missing_on_column(int val, int rang, int t[], int len)
+int manque_sur_colonne(int val, int rang, int t[])
 {
-    int cote = sqrt(len);
     int rang_inf = -1;
     do
     {
-        if (rang < cote)
+        if (rang < cotegrille)
         {
             rang_inf = rang;
         }
         else
         {
-            rang = rang - cote;
+            rang = rang - cotegrille;
         }
     } while (rang_inf == -1);
-    int rang_sup = rang_inf + (cote - 1) * cote;
+    int rang_sup = rang_inf + (cotegrille - 1) * cotegrille;
     //printf("inf %d / sup %d\n", rang_inf, rang_sup);
-    for (int i = rang_inf; i <= rang_sup; i = i + cote) // Cette boucle constitue la colonne
+    for (int i = rang_inf; i <= rang_sup; i = i + cotegrille) // Cette boucle constitue la colonne
     {
         if (t[i] == val)
         {
@@ -152,7 +160,25 @@ int missing_on_column(int val, int rang, int t[], int len)
     return 1; // (vrai) val est absente de la colonne
 }
 
-int missing_on_cell(int val, int rang, int t[], int len)
+int manque_dans_bloc(int val, int rang, int t[], int b[][cotegrille])
 {
-    return 0;
+    // on va rechercher dans quelle bloc se trouve la "val" par son "rang"
+    // puis une fois le bloc identifie on cherche si "val" en est absent
+    // si absent (vrai) on retourne 1, sinon si present (faux) on retourne 0.
+    int bloctrouve = -1;
+    // identification du bloc
+    for (int i = 0; i < cotegrille; i++) {// pour chaque bloc
+        for (int j = 0; j < cotegrille; j++) {// on regarde les indices
+            if (b[i][j] == rang) {
+                bloctrouve = i;
+            }
+        }
+    }
+    // on a le bloc dans bloctrouve et on regarde si val est dans ce bloc
+    for (int i = 0; i < cotegrille; i++) {// pour chaque element du bloc
+        if (b[bloctrouve][i] == val) {
+            return 0;
+        }
+    }
+    return 1;
 }
