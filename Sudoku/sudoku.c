@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
 
-int len;                  // taille du tableau modelisant la grille
-int n;                    // taille du cote d'un bloc
-int cotegrille;           // longueur d'un cote de la grille
-int cotebloc;             // longeur d'un bloc
-char separateur[1] = " "; // separateur des elements de la grille
+int len;        // taille du tableau modelisant la grille
+int n;          // taille du cote d'un bloc
+int cotegrille; // longueur d'un cote de la grille
+int cotebloc;   // longeur d'un bloc
 
 void print_grid(int t[]);
 int read_grid(int t[]);
@@ -25,12 +25,13 @@ int main()
         printf("ERREUR: La grille est trop petite (minimum 2)...\n");
         return 0;
     }
-    // un tableau avec un dimension devra contenir n puissance 4 cellules.
+    // un tableau de n de long devra contenir n puissance 4 cellules.
     len = pow(n, 4);
     cotegrille = sqrt(len);      // longueur d'un cote de la grille
     cotebloc = sqrt(cotegrille); // longeur d'un bloc
     int grille[len];             // la grille en tableau a une seule dimension
-    for (int i = 0; i < len; i++){
+    for (int i = 0; i < len; i++)
+    {
         grille[i] = 0;
     }
 
@@ -40,8 +41,8 @@ int main()
         printf("ERREUR: impossible d'ouvrir le fichier.\n");
         return 0;
     }
-//    print_grid(grille);
-    return 0; // a enlever le temps de blinder la lecture de la grille
+    print_grid(grille);
+//    return 0; // a enlever le temps de blinder la lecture de la grille
 
     // creation des cases de la grille remplies avec les indices
     // il nous faut "cotegrille" blocs, chaque bloc contiendra "cotegrille" indices
@@ -111,7 +112,7 @@ void print_grid(int t[])
         }
         else
         {
-            printf("%2d ", t[i - 1]);
+            printf("%3d ", t[i - 1]);
         }
         if (i > 0)
         {
@@ -129,7 +130,8 @@ int read_grid(int t[])
     char nomfichier[] = "";
     // Chaque ligne devra contenir des nombres de taille 99 maximum d'ou 2*cotegrille
     // et un cotegrille supplementaire pour les espaces.
-    int tailleligne = 12 * cotegrille + cotegrille;
+    int tailleligne = 2 * cotegrille + cotegrille;
+    int position = 0; // repere pour l'injection dans le tableau en parametre
 
     printf("Nom du fichier de grille svp : ");
     scanf("%s", nomfichier);
@@ -140,13 +142,16 @@ int read_grid(int t[])
         char ligne[tailleligne];
         while (fgets(ligne, tailleligne, fichier) != NULL) // Tant qu'il y a des lignes dans le fichier
         {
-            printf("Ligne lue : %s", ligne);
+            printf("Ligne lue : '%s'", ligne);
             int i = 0;
-            while (i < 7)
+            while (i < (2*cotegrille-1))
             {
-                printf("%c\n", ligne[i]);
-                i++;
+                    printf("i(%d,%d) =  %c\n", i, position, ligne[i]);
+                    t[position] = ligne[i] - '0';
+                    position++;
+                i = i + 2;
             }
+            printf("\n");
         }
         fclose(fichier);
     }
