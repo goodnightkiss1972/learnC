@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include <stdlib.h>
 
 int len;        // taille du tableau modelisant la grille
 int n;          // taille du cote d'un bloc
@@ -140,20 +142,20 @@ int read_grid(int t[])
         char ligne[tailleligne];
         while (fgets(ligne, tailleligne, fichier) != NULL) // Tant qu'il y a des lignes dans le fichier
         {
-            // Cette technique ne fonctionnera pas pour des elements > 9
             //printf("Ligne lue : '%s'", ligne);
-            int i = 0;
-            while (i < (2 * cotegrille - 1))
+            // https://openclassrooms.com/forum/sujet/comprendre-strtok
+            char *token;
+            //Découper la chaîne selon les espaces
+            token = strtok(ligne, " ");
+
+            //Afficher le résultat du découpage
+            while (token != NULL)
             {
-                if ('0' <= ligne[i] && ligne[i] <= '9') // si le char est entre 0 et 9
-                {
-                    //printf("i(%d,%d) =  %c\n", i, position, ligne[i]);
-                    t[position] = ligne[i] - '0'; // convertit en int https://blog.udemy.com/c-string-to-int/
-                    position++;
-                }
-                i++;
+                printf("%s \n", token);
+                t[position] = atoi(token);
+                position++;
+                token = strtok(NULL, " ");
             }
-            //printf("\n");
         }
         fclose(fichier);
     }
