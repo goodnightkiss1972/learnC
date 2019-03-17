@@ -42,7 +42,7 @@ int main()
         return 0;
     }
     print_grid(grille);
-//    return 0; // a enlever le temps de blinder la lecture de la grille
+    //    return 0; // a enlever le temps de blinder la lecture de la grille
 
     // creation des cases de la grille remplies avec les indices
     // il nous faut "cotegrille" blocs, chaque bloc contiendra "cotegrille" indices
@@ -94,7 +94,7 @@ int main()
     printf(" attendu 1 > %d\n", manque_dans_bloc(4, 0, grille, blocs)); // devrait etre vrai donc = 1
     printf(" attendu 0 > %d\n", manque_dans_bloc(4, 10, grille, blocs)); // devrait etre faux donc = 0
     */
-    printf("\n a la fin : %d\n", solve(grille, blocs, 0));
+    printf("\nResultat du solve : %d\n", solve(grille, blocs, 0));
     printf("\n");
     print_grid(grille);
 
@@ -133,7 +133,7 @@ int read_grid(int t[])
     int tailleligne = 2 * cotegrille + cotegrille;
     int position = 0; // repere pour l'injection dans le tableau en parametre
 
-    printf("Nom du fichier de grille svp : ");
+    printf("Entrez le nom du fichier de grille svp : ");
     scanf("%s", nomfichier);
 
     FILE *fichier = fopen(nomfichier, "r"); // Ouverture du fichier en lecture seule
@@ -142,16 +142,20 @@ int read_grid(int t[])
         char ligne[tailleligne];
         while (fgets(ligne, tailleligne, fichier) != NULL) // Tant qu'il y a des lignes dans le fichier
         {
-            printf("Ligne lue : '%s'", ligne);
+            // Cette technique ne fonctionnera pas pour des elements > 9
+            //printf("Ligne lue : '%s'", ligne);
             int i = 0;
-            while (i < (2*cotegrille-1))
+            while (i < (2 * cotegrille - 1))
             {
-                    printf("i(%d,%d) =  %c\n", i, position, ligne[i]);
-                    t[position] = ligne[i] - '0';
+                if ('0' <= ligne[i] && ligne[i] <= '9') // si le char est entre 0 et 9
+                {
+                    //printf("i(%d,%d) =  %c\n", i, position, ligne[i]);
+                    t[position] = ligne[i] - '0'; // convertit en int https://blog.udemy.com/c-string-to-int/
                     position++;
-                i = i + 2;
+                }
+                i++;
             }
-            printf("\n");
+            //printf("\n");
         }
         fclose(fichier);
     }
@@ -174,7 +178,7 @@ int solve(int t[], int b[][cotegrille], int position)
     // Si la case n'est pas egale a zero on passe a la suivante
     // en essayant toutes les possibilites de 1 a cotegrille
     // ce qui fait aussi qu'on ne touchera pas les valeurs mises au départ
-    printf("%2d ", position);
+    //printf("%2d ", position);
     if (t[position] != 0)
     {
         return solve(t, b, position + 1);
