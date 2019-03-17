@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <math.h>
-#include <string.h>
-#include <stdlib.h>
 
 int len;        // taille du tableau modelisant la grille
 int n;          // taille du cote d'un bloc
