@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
-int len;        // taille du tableau modelisant la grille
-int n;          // taille du cote d'un bloc
-int cotegrille; // longueur d'un cote de la grille
-int cotebloc;   // longeur d'un bloc
+int len;                  // taille du tableau modelisant la grille
+int n;                    // taille du cote d'un bloc
+int cotegrille;           // longueur d'un cote de la grille
+int cotebloc;             // longeur d'un bloc
+char separateur[1] = " "; // separateur des elements de la grille
 
 void print_grid(int t[]);
 int read_grid(int t[]);
@@ -27,7 +29,10 @@ int main()
     len = pow(n, 4);
     cotegrille = sqrt(len);      // longueur d'un cote de la grille
     cotebloc = sqrt(cotegrille); // longeur d'un bloc
-    int grille[len]; // la grille en tableau a une seule dimension
+    int grille[len];             // la grille en tableau a une seule dimension
+    for (int i = 0; i < len; i++){
+        grille[i] = 0;
+    }
 
     // Chargement de la grille a partir d'un fichier externe
     if (read_grid(grille) == 0)
@@ -35,8 +40,8 @@ int main()
         printf("ERREUR: impossible d'ouvrir le fichier.\n");
         return 0;
     }
+//    print_grid(grille);
     return 0; // a enlever le temps de blinder la lecture de la grille
-    print_grid(grille);
 
     // creation des cases de la grille remplies avec les indices
     // il nous faut "cotegrille" blocs, chaque bloc contiendra "cotegrille" indices
@@ -124,8 +129,8 @@ int read_grid(int t[])
     char nomfichier[] = "";
     // Chaque ligne devra contenir des nombres de taille 99 maximum d'ou 2*cotegrille
     // et un cotegrille supplementaire pour les espaces.
-    int tailleligne = 2*cotegrille + cotegrille;
-    
+    int tailleligne = 12 * cotegrille + cotegrille;
+
     printf("Nom du fichier de grille svp : ");
     scanf("%s", nomfichier);
 
@@ -133,11 +138,16 @@ int read_grid(int t[])
     if (fichier != NULL)
     {
         char ligne[tailleligne];
-        while (fgets(ligne, tailleligne, fichier) != NULL)
+        while (fgets(ligne, tailleligne, fichier) != NULL) // Tant qu'il y a des lignes dans le fichier
         {
-            printf("%s", ligne);
+            printf("Ligne lue : %s", ligne);
+            int i = 0;
+            while (i < 7)
+            {
+                printf("%c\n", ligne[i]);
+                i++;
+            }
         }
-        printf("\n");
         fclose(fichier);
     }
     else
