@@ -75,7 +75,8 @@ int main()
     } while (indice <= len);
 
     // verification du rendu des blocs
-    /*    for (int j = 0; j < cotegrille; j++)
+    /*
+    for (int j = 0; j < cotegrille; j++)
     {
         printf("Indices du bloc %d :", j);
         for (int k = 0; k < cotegrille; k++)
@@ -84,15 +85,20 @@ int main()
         }
         printf("\n");
     }
-*/
+    */
     // tests
     /*
     printf(" attendu 1 > %d\n", manque_sur_ligne(2, 1, grille)); // devrait etre vrai donc = 1
-    printf(" attendu 0 > %d\n", manque_sur_ligne(4, 10, grille)); // devrait etre faux donc = 0
-    printf(" attendu 1 > %d\n", manque_sur_colonne(2, 2, grille)); // devrait etre vrai donc = 1
-    printf(" attendu 0 > %d\n", manque_sur_colonne(4, 10, grille)); // devrait etre faux donc = 0
-    printf(" attendu 1 > %d\n", manque_dans_bloc(4, 0, grille, blocs)); // devrait etre vrai donc = 1
-    printf(" attendu 0 > %d\n", manque_dans_bloc(4, 10, grille, blocs)); // devrait etre faux donc = 0
+    printf(" attendu 1 > %d\n", manque_sur_ligne(4, 10, grille)); // devrait etre vrai donc = 1
+    printf(" attendu 0 > %d\n", manque_sur_ligne(4, 5, grille)); // devrait etre faux donc = 0
+    printf("\n");
+    printf(" attendu 0 > %d\n", manque_sur_colonne(2, 2, grille)); // devrait etre faux donc = 0
+    printf(" attendu 0 > %d\n", manque_sur_colonne(3, 10, grille)); // devrait etre faux donc = 0
+    printf(" attendu 1 > %d\n", manque_sur_colonne(4, 3, grille)); // devrait etre vrai donc = 1
+    printf("\n");
+    printf(" attendu 0 > %d\n", manque_dans_bloc(4, 0, grille, blocs)); // devrait etre faux donc = 0
+    printf(" attendu 1 > %d\n", manque_dans_bloc(4, 11, grille, blocs)); // devrait etre vrai donc = 1
+    printf("\n");
     */
     printf("\nResultat du solve : %d\n", solve(grille, blocs, 0));
     printf("\n");
@@ -145,18 +151,17 @@ int read_grid(int t[])
             //printf("Ligne lue : '%s'", ligne);
             // https://openclassrooms.com/forum/sujet/comprendre-strtok
             char *token;
+            int i = 0;
             //Découper la chaîne selon les espaces
             token = strtok(ligne, " ");
 
             //Afficher le résultat du découpage
-            while (token != NULL)
+            while (i < cotegrille)
             {
-                //printf("[%s]", token);
                 t[position] = atoi(token);
                 position++;
-                //printf(" # ");
                 token = strtok(NULL, " ");
-                //printf("(%s)", token);
+                i++;
             }
             printf("\n");
         }
@@ -177,11 +182,11 @@ int solve(int t[], int b[][cotegrille], int position)
     if (position == len + 1)
     {
         return 1;
+        printf("\n FINAL de solve\n");
     }
     // Si la case n'est pas egale a zero on passe a la suivante
     // en essayant toutes les possibilites de 1 a cotegrille
     // ce qui fait aussi qu'on ne touchera pas les valeurs mises au départ
-    printf("%2d ", position);
     if (t[position] != 0)
     {
         return solve(t, b, position + 1);
@@ -191,6 +196,7 @@ int solve(int t[], int b[][cotegrille], int position)
     {
         if (manque_sur_ligne(essai, position, t) == 1 && manque_sur_colonne(essai, position, t) == 1 && manque_dans_bloc(essai, position, t, b) == 1)
         {
+            //printf("\nEcrire dans la position %2d la valeur %d\n", position, essai);
             t[position] = essai;
             if (solve(t, b, position + 1) == 1)
             {
@@ -263,11 +269,10 @@ int manque_dans_bloc(int val, int rang, int t[], int b[][cotegrille])
             }
         }
     }
-    //printf("Test manque_dans_bloc la val %d en rang %d (bloc trouve: %d):", val, rang, bloctrouve);
     // on a le bloc dans bloctrouve et on regarde si val est dans ce bloc
     for (int i = 0; i < cotegrille; i++)
     { // pour chaque element du bloc
-        if (b[bloctrouve][i] == val)
+        if (t[b[bloctrouve][i]] == val)
         {
             return 0;
         }
