@@ -151,11 +151,15 @@ int read_grid(int t[])
             //Afficher le résultat du découpage
             while (token != NULL)
             {
-                printf("%s \n", token);
+                printf("[%s]", token);
                 t[position] = atoi(token);
                 position++;
-                token = strtok(NULL, " ");
+                printf("#");
+                token = strtok(NULL, " ,");
+                printf("(%s)\n", token);
             }
+            position--; // il faut reculer d'un element pour eviter le retour a la ligne
+            // en attendant mieux, c'est a dire tester cette valeur
         }
         fclose(fichier);
     }
@@ -178,23 +182,26 @@ int solve(int t[], int b[][cotegrille], int position)
     // Si la case n'est pas egale a zero on passe a la suivante
     // en essayant toutes les possibilites de 1 a cotegrille
     // ce qui fait aussi qu'on ne touchera pas les valeurs mises au départ
-    //printf("%2d ", position);
+    printf("%2d ", position);
     if (t[position] != 0)
     {
         return solve(t, b, position + 1);
     }
-    else
+
+    for (int essai = 1; essai <= cotegrille; essai++)
     {
-        for (int essai = 1; essai <= cotegrille; essai++)
+        if (manque_sur_ligne(essai, position, t) == 1 && manque_sur_colonne(essai, position, t) == 1 && manque_dans_bloc(essai, position, t, b) == 1)
         {
-            if (manque_sur_ligne(essai, position, t) == 1 && manque_sur_colonne(essai, position, t) == 1 && manque_dans_bloc(essai, position, t, b) == 1)
+            t[position] = essai;
+            if (solve(t, b, position + 1) == 1)
             {
-                t[position] = essai;
-                return solve(t, b, position + 1);
+                return 1;
             }
         }
     }
-    return 0; // on y est pas arrive
+
+    t[position] = 0; // on remet a zero pour pouvoir essayer a nouveau apres
+    return 0;        // on y est pas arrive
 }
 
 int manque_sur_ligne(int val, int rang, int t[])
