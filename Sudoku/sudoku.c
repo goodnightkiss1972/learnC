@@ -151,15 +151,14 @@ int read_grid(int t[])
             //Afficher le résultat du découpage
             while (token != NULL)
             {
-                printf("[%s]", token);
+                //printf("[%s]", token);
                 t[position] = atoi(token);
                 position++;
-                printf("#");
-                token = strtok(NULL, " ,");
-                printf("(%s)\n", token);
+                //printf(" # ");
+                token = strtok(NULL, " ");
+                //printf("(%s)", token);
             }
-            position--; // il faut reculer d'un element pour eviter le retour a la ligne
-            // en attendant mieux, c'est a dire tester cette valeur
+            printf("\n");
         }
         fclose(fichier);
     }
