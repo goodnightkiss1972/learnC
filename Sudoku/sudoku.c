@@ -138,6 +138,7 @@ int read_grid(int t[])
     // et un cotegrille supplementaire pour les espaces.
     int tailleligne = 2 * cotegrille + cotegrille;
     int position = 0; // repere pour l'injection dans le tableau en parametre
+    int i = 0;
 
     printf("Entrez le nom du fichier de grille svp : ");
     scanf("%s", nomfichier);
@@ -146,24 +147,26 @@ int read_grid(int t[])
     if (fichier != NULL)
     {
         char ligne[tailleligne];
-        while (fgets(ligne, tailleligne, fichier) != NULL) // Tant qu'il y a des lignes dans le fichier
+        while (i < cotegrille) // on cible "cotegrille" ligne pour eviter les lignes vides apres la grille
         {
-            //printf("Ligne lue : '%s'", ligne);
+            fgets(ligne, tailleligne, fichier);
+            printf("Ligne lue : '%s'", ligne);
             // https://openclassrooms.com/forum/sujet/comprendre-strtok
             char *token;
-            int i = 0;
+            int j = 0;
             //Découper la chaîne selon les espaces
             token = strtok(ligne, " ");
 
             //Afficher le résultat du découpage
-            while (i < cotegrille)
+            while (j < cotegrille)
             {
                 t[position] = atoi(token);
                 position++;
                 token = strtok(NULL, " ");
-                i++;
+                j++;
             }
             printf("\n");
+            i++;
         }
         fclose(fichier);
     }
