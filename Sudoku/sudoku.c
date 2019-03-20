@@ -9,8 +9,9 @@ int cotegrille; // longueur d'un cote de la grille
 int cotebloc;   // longeur d'un bloc
 
 void print_grid(int t[]);
-int read_grid(int t[]);
+int read_grid(char fichier[255], int t[]);
 int solve(int t[], int b[][cotegrille], int position);
+int write_grid(char fichier[255], int t[]);
 
 int manque_sur_ligne(int val, int rang, int t[]);
 int manque_sur_colonne(int val, int rang, int t[]);
@@ -18,11 +19,11 @@ int manque_dans_bloc(int val, int rang, int t[], int b[][cotegrille]);
 
 int main()
 {
-    printf("Entrez la taille de la grille svp (minimum 2) : ");
+    printf("\nEntrez la taille de la grille svp (minimum 2) : ");
     scanf("%d", &n);
     if (n < 2)
     {
-        printf("ERREUR: La grille est trop petite (minimum 2)...\n");
+        printf("\nERREUR: La grille est trop petite (minimum 2)...\n");
         return 0;
     }
     // un tableau de n de long devra contenir n puissance 4 cellules.
@@ -35,12 +36,17 @@ int main()
         grille[i] = 0;
     }
 
+    char nomfichier[255] = "";
+    printf("\nEntrez le nom du fichier de grille svp : ");
+    scanf("%254s", nomfichier);
+
     // Chargement de la grille a partir d'un fichier externe
-    if (read_grid(grille) == 0)
+    if (read_grid(nomfichier, grille) == 0)
     {
-        printf("ERREUR: impossible d'ouvrir le fichier.\n");
+        printf("\nERREUR: impossible d'ouvrir le fichier %s\n", nomfichier);
         return 0;
     }
+    printf("\n");
     print_grid(grille);
     //    return 0; // a enlever le temps de blinder la lecture de la grille
 
@@ -100,10 +106,22 @@ int main()
     printf(" attendu 1 > %d\n", manque_dans_bloc(4, 11, grille, blocs)); // devrait etre vrai donc = 1
     printf("\n");
     */
-    printf("\nResultat du solve : %d\n", solve(grille, blocs, 0));
-    printf("\n");
-    print_grid(grille);
-
+    int resultat;
+    resultat = solve(grille, blocs, 0);
+    if (resultat == 1)
+    {
+        printf("\n");
+        print_grid(grille);
+        strcat(nomfichier, ".resultat.txt"); // on rajoute l'extension pour la sauvegarde
+        if (write_grid(nomfichier, grille) == 1)
+        {
+            printf("\nResultat sauvegarde sous %s\n", nomfichier);
+        }
+        else
+        {
+            printf("\nERREUR : Sauvegarde du fichier impossible.");
+        }
+    }
     return 0;
 }
 
@@ -131,17 +149,13 @@ void print_grid(int t[])
     }
 }
 
-int read_grid(int t[])
+int read_grid(char nomfichier[255], int t[])
 {
-    char nomfichier[] = "";
     // Chaque ligne devra contenir des nombres de taille 99 maximum d'ou 2*cotegrille
     // et un cotegrille supplementaire pour les espaces.
     int tailleligne = 2 * cotegrille + cotegrille;
     int position = 0; // repere pour l'injection dans le tableau en parametre
     int i = 0;
-
-    printf("Entrez le nom du fichier de grille svp : ");
-    scanf("%s", nomfichier);
 
     FILE *fichier = fopen(nomfichier, "r"); // Ouverture du fichier en lecture seule
     if (fichier != NULL)
@@ -150,7 +164,7 @@ int read_grid(int t[])
         while (i < cotegrille) // on cible "cotegrille" ligne pour eviter les lignes vides apres la grille
         {
             fgets(ligne, tailleligne, fichier);
-            printf("Ligne lue : '%s'", ligne);
+            //printf("Ligne lue : '%s'", ligne);
             // https://openclassrooms.com/forum/sujet/comprendre-strtok
             char *token;
             int j = 0;
@@ -165,7 +179,7 @@ int read_grid(int t[])
                 token = strtok(NULL, " ");
                 j++;
             }
-            printf("\n");
+            //printf("\n");
             i++;
         }
         fclose(fichier);
@@ -177,6 +191,11 @@ int read_grid(int t[])
     }
     return 1; // Tout s'est bien passe
 }
+
+int write_grid(char nomfichier[255], int t[]) {
+    return 1; // fichier sauvergardé
+}
+
 
 int solve(int t[], int b[][cotegrille], int position)
 {
