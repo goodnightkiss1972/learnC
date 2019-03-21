@@ -112,10 +112,16 @@ int main()
     {
         printf("\n");
         print_grid(grille);
+
+        char *nomsansextension;
+        int j = 0;
+        //Découper la chaîne selon les espaces
+        nomsansextension = strtok(nomfichier, ".");
+
         strcat(nomfichier, ".resultat.txt"); // on rajoute l'extension pour la sauvegarde
         if (write_grid(nomfichier, grille) == 1)
         {
-            printf("\nResultat sauvegarde sous %s\n", nomfichier);
+            printf("\nLe resultat se trouve dans %s\n", nomfichier);
         }
         else
         {
@@ -192,10 +198,41 @@ int read_grid(char nomfichier[255], int t[])
     return 1; // Tout s'est bien passe
 }
 
-int write_grid(char nomfichier[255], int t[]) {
-    return 1; // fichier sauvergardé
-}
+int write_grid(char nomfichier[255], int t[])
+{
 
+    FILE *fichier = fopen(nomfichier, "w"); // Ouverture du fichier en ecriture
+    if (fichier != NULL)
+    {
+        int i = 1;
+        while (i < len + 1) // on va ecrire autant d'element qu'il y en a dans le tableau
+        {
+            if (cotegrille <= 9)
+            {
+                fprintf(fichier, "%d ", t[i - 1]);
+            }
+            else
+            {
+                fprintf(fichier, "%3d ", t[i - 1]);
+            }
+            if (i % cotegrille == 0)
+            {
+                if (i != len)
+                {
+                    fprintf(fichier, "\n");
+                }
+            }
+            i++;
+        }
+        fclose(fichier);
+    }
+    else
+    {
+        perror(nomfichier); // Affiche l'erreur si on arrive pas a fermer le fichier
+        return 0;
+    }
+    return 1; // Tout s'est bien passe
+}
 
 int solve(int t[], int b[][cotegrille], int position)
 {
