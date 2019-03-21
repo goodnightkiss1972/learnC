@@ -355,6 +355,13 @@ int write_grid(char nomfichier[255], int t[])
     return 1; // Tout s'est bien passe
 }
 
+/**
+ * @brief Verifie si la grille respecte les regles du SUDOKU
+ * 
+ * @param t la grille a verifier
+ * @param b les definitions des blocs (tableaux d'indices)
+ * @return int 1 si la grille est valide, sinon 0
+ */
 int check_grid(int t[], int b[][cotegrille])
 {
     // on va passer en revue tout les elements de la grille
