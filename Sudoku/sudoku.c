@@ -372,12 +372,13 @@ int check_grid(int t[], int b[][cotegrille])
             t[i] = 9999;    // on met 9999 à la place
             if (manque_sur_ligne(retenue, i, t) == 1 && manque_sur_colonne(retenue, i, t) == 1 && manque_dans_bloc(retenue, i, t, b) == 1)
             {
-                printf("Verification position %d ok\n", i);
+                //printf("Verification position %d ok\n", i);
                 t[i] = retenue; // on remet la valeur retenue en place
             }
             else
             {
-                printf("Verification position %d not ok\n", i);
+                printf("\n");
+                printf("Verification position %d incorrecte\n", i);
                 return 0; // la grille n'est pas valide
             }
         }
