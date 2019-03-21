@@ -6,12 +6,13 @@
 int len;        // taille du tableau modelisant la grille
 int n;          // taille du cote d'un bloc
 int cotegrille; // longueur d'un cote de la grille
-int cotebloc;   // longeur d'un bloc
+int cotebloc;   // longueur d'un bloc
 
 void print_grid(int t[]);
 int read_grid(char fichier[255], int t[]);
 int solve(int t[], int b[][cotegrille], int position);
 int write_grid(char fichier[255], int t[]);
+int check_grid(int t[], int b[][cotegrille]);
 
 int manque_sur_ligne(int val, int rang, int t[]);
 int manque_sur_colonne(int val, int rang, int t[]);
@@ -106,12 +107,27 @@ int main()
     printf(" attendu 1 > %d\n", manque_dans_bloc(4, 11, grille, blocs)); // devrait etre vrai donc = 1
     printf("\n");
     */
+
+    // verification initiale de la grille
+    if (check_grid(grille, blocs) != 1)
+    {
+        printf("ERREUR : La grille contient des erreurs, elle n'aura pas de solution.\n");
+        return 0;
+    }
+
     int resultat;
     resultat = solve(grille, blocs, 0);
     if (resultat == 1)
     {
         printf("\n");
         print_grid(grille);
+
+        // ultime verification avant sauvegarde du resultat
+        if (check_grid(grille, blocs) != 1)
+        {
+            printf("ERREUR : Apres solve correct la grille n'est pas valide...\n");
+            return 0;
+        }
 
         char *nomsansextension;
         int j = 0;
@@ -193,42 +209,6 @@ int read_grid(char nomfichier[255], int t[])
     else
     {
         perror(nomfichier); // Affiche l'erreur si on arrive pas a ouvrir le fichier
-        return 0;
-    }
-    return 1; // Tout s'est bien passe
-}
-
-int write_grid(char nomfichier[255], int t[])
-{
-
-    FILE *fichier = fopen(nomfichier, "w"); // Ouverture du fichier en ecriture
-    if (fichier != NULL)
-    {
-        int i = 1;
-        while (i < len + 1) // on va ecrire autant d'element qu'il y en a dans le tableau
-        {
-            if (cotegrille <= 9)
-            {
-                fprintf(fichier, "%d ", t[i - 1]);
-            }
-            else
-            {
-                fprintf(fichier, "%3d ", t[i - 1]);
-            }
-            if (i % cotegrille == 0)
-            {
-                if (i != len)
-                {
-                    fprintf(fichier, "\n");
-                }
-            }
-            i++;
-        }
-        fclose(fichier);
-    }
-    else
-    {
-        perror(nomfichier); // Affiche l'erreur si on arrive pas a fermer le fichier
         return 0;
     }
     return 1; // Tout s'est bien passe
@@ -337,4 +317,71 @@ int manque_dans_bloc(int val, int rang, int t[], int b[][cotegrille])
         }
     }
     return 1;
+}
+
+int write_grid(char nomfichier[255], int t[])
+{
+
+    FILE *fichier = fopen(nomfichier, "w"); // Ouverture du fichier en ecriture
+    if (fichier != NULL)
+    {
+        int i = 1;
+        while (i < len + 1) // on va ecrire autant d'element qu'il y en a dans le tableau
+        {
+            if (cotegrille <= 9)
+            {
+                fprintf(fichier, "%d ", t[i - 1]);
+            }
+            else
+            {
+                fprintf(fichier, "%3d ", t[i - 1]);
+            }
+            if (i % cotegrille == 0)
+            {
+                if (i != len)
+                {
+                    fprintf(fichier, "\n");
+                }
+            }
+            i++;
+        }
+        fclose(fichier);
+    }
+    else
+    {
+        perror(nomfichier); // Affiche l'erreur si on arrive pas a fermer le fichier
+        return 0;
+    }
+    return 1; // Tout s'est bien passe
+}
+
+int check_grid(int t[], int b[][cotegrille])
+{
+    // on va passer en revue tout les elements de la grille
+    // chaque fois on va retenir la valeur de la cellule et la remplacer par 9999
+    // si la retenue est manquante dans la ligne, la colonne et le bloc
+    // alors on remet la retenue en place est on continue
+    // jusqu'a avoir parcouru tout le tableau
+    int retenue = 0;
+    int i = 0;
+    while (i < len)
+    {
+        retenue = t[i]; // on retient la valeur en cours
+        if (retenue != 0)
+        {
+            t[i] = 9999;    // on met 9999 à la place
+            if (manque_sur_ligne(retenue, i, t) == 1 && manque_sur_colonne(retenue, i, t) == 1 && manque_dans_bloc(retenue, i, t, b) == 1)
+            {
+                printf("Verification position %d ok\n", i);
+                t[i] = retenue; // on remet la valeur retenue en place
+            }
+            else
+            {
+                printf("Verification position %d not ok\n", i);
+                return 0; // la grille n'est pas valide
+            }
+        }
+        i++;
+    }
+    return 1; // la grille est valide
 }
