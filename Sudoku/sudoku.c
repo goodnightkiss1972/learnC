@@ -376,7 +376,7 @@ int check_grid(int t[], int b[][cotegrille])
         retenue = t[i]; // on retient la valeur en cours
         if (retenue != 0)
         {
-            t[i] = 9999;    // on met 9999 à la place
+            t[i] = 9999; // on met 9999 à la place
             if (manque_sur_ligne(retenue, i, t) == 1 && manque_sur_colonne(retenue, i, t) == 1 && manque_dans_bloc(retenue, i, t, b) == 1)
             {
                 //printf("Verification position %d ok\n", i);
