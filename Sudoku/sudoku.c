@@ -13,10 +13,14 @@ int read_grid(char fichier[255], int t[]);
 int solve(int t[], int b[][cotegrille], int position);
 int write_grid(char fichier[255], int t[]);
 int check_grid(int t[], int b[][cotegrille]);
+void copy_grid(int tsource[], int tdestination[]);
+void enhance_grid(int t[], int b[][cotegrille]);
 
 int manque_sur_ligne(int val, int rang, int t[]);
 int manque_sur_colonne(int val, int rang, int t[]);
 int manque_dans_bloc(int val, int rang, int t[], int b[][cotegrille]);
+int encore_une_case_zero_dans_grille(int t[]);
+int depose_amelioration(int rang, int t[], int b[][cotegrille]);
 
 int main()
 {
@@ -49,6 +53,7 @@ int main()
     }
     printf("\n");
     print_grid(grille);
+    
     //    return 0; // a enlever le temps de blinder la lecture de la grille
 
     // creation des cases de la grille remplies avec les indices
@@ -114,6 +119,15 @@ int main()
         printf("ERREUR : La grille contient des erreurs, elle n'aura pas de solution.\n");
         return 0;
     }
+
+    // avec la grille chargee et valide on va creer une grille de travail pour la methode intelligente
+    int grilletravail[len];
+    copy_grid(grille, grilletravail);
+    enhance_grid(grilletravail, blocs);
+    printf("\n");
+    print_grid(grilletravail);
+
+    return 0; // ici on peut s'arreter pour voir l'amelioration seulement
 
     int resultat;
     resultat = solve(grille, blocs, 0);
@@ -392,4 +406,84 @@ int check_grid(int t[], int b[][cotegrille])
         i++;
     }
     return 1; // la grille est valide
+}
+
+void copy_grid(int tsource[], int tdestination[])
+{
+    // copie de valeurs a valeurs par une boucle de taille len
+    for (int i = 0; i < len; i++)
+    {
+        tdestination[i] = tsource[i];
+    }
+}
+
+void enhance_grid(int t[], int b[][cotegrille])
+{
+    // pour ameliorer une grille on va parcourir toute les positions qui contiennent zero
+    // puis a chaque fois on va regarder si plus d'une solution est possible
+    // si c'est le cas on passe a la prochaine position
+    // jusqu'a rencontrer une position avec une seule solution possible et on l'applique
+    // puis on recommence jusqu'a ne plus rien ameliorer 
+    // ou ne plus rien a avoir a ameliorer pour ne pas faire de boucle infinie
+
+    int amelioration = 0; // sera mis a 1 chaque fois qu'une amelioration aura eu lieu
+    while (encore_une_case_zero_dans_grille(t) == 1 || amelioration > 0)
+    {
+        amelioration = 0;
+        for (int i = 0; i < len; i++)
+        {
+            if (t[i] == 0)
+            {
+                //printf("essai amelioration au rang %d (valeur actuelle %d)\n", i, t[i]);
+                amelioration = amelioration + depose_amelioration(i, t, b);
+            }
+        }
+    }
+
+}
+
+int encore_une_case_zero_dans_grille(int t[])
+{
+    // retourne 0 si plus aucune case ne contient 0
+    // sinon retourne 1 et donc la grille n'est pas complete
+    int valeur = 0;
+    for (int i = 0; i < len; i++)
+    {
+        if (t[i] == valeur)
+        {
+            return 1; // on s'arrete la premiere fois qu'on rencontre la valeur 0
+        }
+    }
+    return 0; // on a pas rencontre la valeur 0
+}
+
+int depose_amelioration(int rang, int t[], int b[][cotegrille])
+{
+    // si au rang en question il n'existe qu'une seule solution respectant les regles
+    // alors on ecrit cette solution dans la grille et on retourne 1
+    // sinon on a pas trouve d'amelioration on retourne 0
+    
+    int nb_solutions_possibles = 0;
+    int index_solutions = 0;
+    int solutions[cotegrille];
+
+    // il faut parcourir entre 1 et le cotegrille +1
+    for (int k = 1; k < cotegrille + 1; k++)
+    {
+        if (manque_sur_ligne(k, rang, t) == 1 && manque_sur_colonne(k, rang, t) == 1 && manque_dans_bloc(k, rang, t, b) == 1)
+        {
+            solutions[index_solutions] = k;
+            index_solutions++;
+            nb_solutions_possibles++;
+            //printf("index_solutions %d / nb_solutions_possibles %d / rang %d / solution %d\n", index_solutions, nb_solutions_possibles, rang, k);
+        }
+    }
+    // si une seule solution trouvee alors on l'ecrit (et c'est forcement la premiere entree du tableau solutions)
+    if (nb_solutions_possibles == 1)
+    {
+        printf("amelioration rang %d : solution posee %d\n", rang, solutions[0]);
+        t[rang] = solutions[0];
+        return 1;
+    }
+    return 0;
 }
