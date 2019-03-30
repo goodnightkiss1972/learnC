@@ -127,7 +127,7 @@ int main()
     printf("\n");
     print_grid(grilletravail);
 
-    return 0; // ici on peut s'arreter pour voir l'amelioration seulement
+    //return 0; // ici on peut s'arreter pour voir l'amelioration seulement
 
     int resultat;
     resultat = solve(grille, blocs, 0);
@@ -426,8 +426,8 @@ void enhance_grid(int t[], int b[][cotegrille])
     // puis on recommence jusqu'a ne plus rien ameliorer 
     // ou ne plus rien a avoir a ameliorer pour ne pas faire de boucle infinie
 
-    int amelioration = 0; // sera mis a 1 chaque fois qu'une amelioration aura eu lieu
-    while (encore_une_case_zero_dans_grille(t) == 1 || amelioration > 0)
+    int amelioration = 1; // sera mis a 1 chaque fois qu'une amelioration aura eu lieu
+    while (amelioration > 0)
     {
         amelioration = 0;
         for (int i = 0; i < len; i++)
@@ -481,7 +481,7 @@ int depose_amelioration(int rang, int t[], int b[][cotegrille])
     // si une seule solution trouvee alors on l'ecrit (et c'est forcement la premiere entree du tableau solutions)
     if (nb_solutions_possibles == 1)
     {
-        printf("amelioration rang %d : solution posee %d\n", rang, solutions[0]);
+        //printf("amelioration rang %d : solution posee %d\n", rang, solutions[0]);
         t[rang] = solutions[0];
         return 1;
     }
