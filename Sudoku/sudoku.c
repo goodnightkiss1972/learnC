@@ -19,7 +19,6 @@ void enhance_grid(int t[], int b[][cotegrille]);
 int manque_sur_ligne(int val, int rang, int t[]);
 int manque_sur_colonne(int val, int rang, int t[]);
 int manque_dans_bloc(int val, int rang, int t[], int b[][cotegrille]);
-int encore_une_case_zero_dans_grille(int t[]);
 int depose_amelioration(int rang, int t[], int b[][cotegrille]);
 
 int main()
@@ -53,7 +52,7 @@ int main()
     }
     printf("\n");
     print_grid(grille);
-    
+
     //    return 0; // a enlever le temps de blinder la lecture de la grille
 
     // creation des cases de la grille remplies avec les indices
@@ -423,7 +422,7 @@ void enhance_grid(int t[], int b[][cotegrille])
     // puis a chaque fois on va regarder si plus d'une solution est possible
     // si c'est le cas on passe a la prochaine position
     // jusqu'a rencontrer une position avec une seule solution possible et on l'applique
-    // puis on recommence jusqu'a ne plus rien ameliorer 
+    // puis on recommence jusqu'a ne plus rien ameliorer
     // ou ne plus rien a avoir a ameliorer pour ne pas faire de boucle infinie
 
     int amelioration = 1; // sera mis a 1 chaque fois qu'une amelioration aura eu lieu
@@ -439,22 +438,6 @@ void enhance_grid(int t[], int b[][cotegrille])
             }
         }
     }
-
-}
-
-int encore_une_case_zero_dans_grille(int t[])
-{
-    // retourne 0 si plus aucune case ne contient 0
-    // sinon retourne 1 et donc la grille n'est pas complete
-    int valeur = 0;
-    for (int i = 0; i < len; i++)
-    {
-        if (t[i] == valeur)
-        {
-            return 1; // on s'arrete la premiere fois qu'on rencontre la valeur 0
-        }
-    }
-    return 0; // on a pas rencontre la valeur 0
 }
 
 int depose_amelioration(int rang, int t[], int b[][cotegrille])
@@ -462,7 +445,7 @@ int depose_amelioration(int rang, int t[], int b[][cotegrille])
     // si au rang en question il n'existe qu'une seule solution respectant les regles
     // alors on ecrit cette solution dans la grille et on retourne 1
     // sinon on a pas trouve d'amelioration on retourne 0
-    
+
     int nb_solutions_possibles = 0;
     int index_solutions = 0;
     int solutions[cotegrille];
