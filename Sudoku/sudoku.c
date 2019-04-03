@@ -3,16 +3,18 @@
 #include <string.h>
 #include <stdlib.h>
 
-int len;           // taille du tableau modelisant la grille
-int n;             // taille du cote d'un bloc
-int cotegrille;    // longueur d'un cote de la grille
-int cotebloc;      // longueur d'un bloc
-int coupsdegomme;  // nombre d'effacement d'essai pendant une resolution
-int ameliorations; // nombre d'amelioration "smart" deposees
+int len;                   // taille du tableau modelisant la grille
+int n;                     // taille du cote d'un bloc
+int cotegrille;            // longueur d'un cote de la grille
+int cotebloc;              // longueur d'un bloc
+int coupsdegomme;          // nombre d'effacement d'essai pendant une resolution
+long ameliorations;         // nombre d'amelioration "smart" deposees
+char nomfichier[255] = ""; // contiendra le fichier a traiter
 
 void print_grid(int t[]);
 int read_grid(char fichier[255], int t[]);
 int solve(int t[], int b[][cotegrille], int position);
+int resolution(int t[], int b[][cotegrille], char extension[255]);
 int write_grid(char fichier[255], int t[]);
 int check_grid(int t[], int b[][cotegrille]);
 void copy_grid(int tsource[], int tdestination[]);
@@ -42,7 +44,6 @@ int main()
         grille[i] = 0;
     }
 
-    char nomfichier[255] = "";
     printf("\nEntrez le nom du fichier de grille svp : ");
     scanf("%254s", nomfichier);
 
@@ -131,37 +132,13 @@ int main()
     printf("\n");
     printf("Nombre d'ameliorations trouvees: %d\n", ameliorations);
 
-    int resultat = 0;
-    coupsdegomme = 0; // on se prepare a une resolution de la grille
-    resultat = solve(grille, blocs, 0);
-    if (resultat == 1)
+    // uniquement si on a pu ameliorer la grille
+    if (ameliorations > 0)
     {
-        printf("\n");
-        print_grid(grille);
-
-        // ultime verification avant sauvegarde du resultat
-        if (check_grid(grille, blocs) != 1)
-        {
-            printf("ERREUR : Apres solve correct la grille n'est pas valide...\n");
-            return 0;
-        }
-
-        char *nomsansextension;
-        int j = 0;
-        //Découper la chaîne selon les espaces
-        nomsansextension = strtok(nomfichier, ".");
-
-        strcat(nomfichier, ".resultat.txt"); // on rajoute l'extension pour la sauvegarde
-        if (write_grid(nomfichier, grille) == 1)
-        {
-            printf("\nLe resultat se trouve dans %s\n", nomfichier);
-        }
-        else
-        {
-            printf("\nERREUR : Sauvegarde du fichier impossible.");
-        }
+        resolution(grilletravail, blocs, ".malin.resultat.txt");
     }
-    printf("Nombre de coups de gomme: %d\n", coupsdegomme);
+    resolution(grille, blocs, ".resultat.txt");
+
     return 0;
 }
 
@@ -230,6 +207,43 @@ int read_grid(char nomfichier[255], int t[])
         return 0;
     }
     return 1; // Tout s'est bien passe
+}
+
+int resolution(int t[], int b[][cotegrille], char extension[255])
+{
+    int resultat = 0;
+    coupsdegomme = 0; // on se prepare a une resolution de la grille
+    resultat = solve(t, b, 0);
+    if (resultat == 1)
+    {
+        printf("\n");
+        print_grid(t);
+
+        // ultime verification avant sauvegarde du resultat
+        if (check_grid(t, b) != 1)
+        {
+            printf("ERREUR : Apres solve correct la grille n'est pas valide...\n");
+            return 0;
+        }
+
+        char *nomsansextension;
+        int j = 0;
+        //Découper la chaîne selon les espaces
+        nomsansextension = strtok(nomfichier, ".");
+
+        strcat(nomfichier, extension); // on rajoute l'extension pour la sauvegarde
+        if (write_grid(nomfichier, t) == 1)
+        {
+            printf("\nLe resultat se trouve dans %s\n", nomfichier);
+        }
+        else
+        {
+            printf("\nERREUR : Sauvegarde du fichier impossible.");
+            return 0;
+        }
+    }
+    printf("Nombre de coups de gomme: %ld\n", coupsdegomme);
+    return 1;
 }
 
 int solve(int t[], int b[][cotegrille], int position)
