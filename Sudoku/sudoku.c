@@ -3,10 +3,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-int len;        // taille du tableau modelisant la grille
-int n;          // taille du cote d'un bloc
-int cotegrille; // longueur d'un cote de la grille
-int cotebloc;   // longueur d'un bloc
+int len;           // taille du tableau modelisant la grille
+int n;             // taille du cote d'un bloc
+int cotegrille;    // longueur d'un cote de la grille
+int cotebloc;      // longueur d'un bloc
+int coupsdegomme;  // nombre d'effacement d'essai pendant une resolution
+int ameliorations; // nombre d'amelioration "smart" deposees
 
 void print_grid(int t[]);
 int read_grid(char fichier[255], int t[]);
@@ -122,13 +124,15 @@ int main()
     // avec la grille chargee et valide on va creer une grille de travail pour la methode intelligente
     int grilletravail[len];
     copy_grid(grille, grilletravail);
+    ameliorations = 0;
     enhance_grid(grilletravail, blocs);
     printf("\n");
     print_grid(grilletravail);
+    printf("\n");
+    printf("Nombre d'ameliorations trouvees: %d\n", ameliorations);
 
-    //return 0; // ici on peut s'arreter pour voir l'amelioration seulement
-
-    int resultat;
+    int resultat = 0;
+    coupsdegomme = 0; // on se prepare a une resolution de la grille
     resultat = solve(grille, blocs, 0);
     if (resultat == 1)
     {
@@ -157,6 +161,7 @@ int main()
             printf("\nERREUR : Sauvegarde du fichier impossible.");
         }
     }
+    printf("Nombre de coups de gomme: %d\n", coupsdegomme);
     return 0;
 }
 
@@ -258,7 +263,8 @@ int solve(int t[], int b[][cotegrille], int position)
     }
 
     t[position] = 0; // on remet a zero pour pouvoir essayer a nouveau apres
-    return 0;        // on y est pas arrive
+    coupsdegomme++;
+    return 0; // on y est pas arrive
 }
 
 int manque_sur_ligne(int val, int rang, int t[])
@@ -466,6 +472,7 @@ int depose_amelioration(int rang, int t[], int b[][cotegrille])
     {
         //printf("amelioration rang %d : solution posee %d\n", rang, solutions[0]);
         t[rang] = solutions[0];
+        ameliorations++;
         return 1;
     }
     return 0;
