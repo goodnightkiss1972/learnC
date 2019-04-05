@@ -168,9 +168,9 @@ void print_grid(int t[])
 
 int read_grid(char nomfichier[255], int t[])
 {
-    // Chaque ligne devra contenir des nombres de taille 99 maximum d'ou 2*cotegrille
-    // et un cotegrille supplementaire pour les espaces.
-    int tailleligne = 2 * cotegrille + cotegrille;
+    // Chaque ligne devra contenir des nombres de taille 99 maximum d'ou 20*cotegrille
+    // pour ne pas s'embeter.
+    int tailleligne = 20 * cotegrille;
     int position = 0; // repere pour l'injection dans le tableau en parametre
     int i = 0;
 
