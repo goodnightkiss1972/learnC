@@ -64,9 +64,8 @@ int taille_list(list *l)
 
 list *renverse_liste(list *l)
 {
-    // calculer la taille de la liste, puis mettre ses elements dans un tableau
-    // creer un deuxieme tableau en lisant le premier a l'envers
-    // puis creer la liste a partir de ce deuxieme tableau.
+    // calculer la taille de la liste, puis mettre ses elements a l'envers dans un tableau
+    // puis creer la liste a partir de ce tableau avec la fonction du prof.
     int taille = taille_list(l);
     if (taille == 0)
     {
