@@ -28,8 +28,6 @@ void affiche_liste(list *l);
 int taille_list(list *l);
 list *renverse_liste(list *l);
 
-/* Exercice 2 */
-
 int main()
 {
 
