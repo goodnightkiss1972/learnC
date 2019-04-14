@@ -38,16 +38,16 @@ int main()
 
     list *maliste = new_list(tableau, 10);
     affiche_liste(maliste);
-    printf("La liste contient %d elements.\n", taille_liste(maliste));
+    printf("\nLa liste contient %d elements.\n\n", taille_liste(maliste));
 
     list *malisteinversee = renverse_liste(maliste);
     affiche_liste(malisteinversee);
 
-    printf("L'element 3 de la premiere liste est : %d\n", valeur_a_la_position_list(maliste, 3));
-    printf("L'element 15 de la premiere liste est : %d\n", valeur_a_la_position_list(maliste, 15));
+    printf("\nL'element 3 de la premiere liste est : %d\n", valeur_a_la_position_list(maliste, 3));
+    printf("\nL'element 15 de la premiere liste est : %d\n", valeur_a_la_position_list(maliste, 15));
 
-    printf("La premiere valeur 1 est a la position : %d\n", position_de_la_premiere_valeur_list(maliste, 1));
-    printf("La premiere valeur 99 est a la position : %d\n", position_de_la_premiere_valeur_list(maliste, 99));
+    printf("\nLa premiere valeur 1 est a la position : %d\n", position_de_la_premiere_valeur_list(maliste, 1));
+    printf("\nLa premiere valeur 99 est a la position : %d\n", position_de_la_premiere_valeur_list(maliste, 99));
 }
 
 void affiche_liste(list *l)
