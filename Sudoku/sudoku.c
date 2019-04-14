@@ -8,7 +8,8 @@ int n;                     // taille du cote d'un bloc
 int cotegrille;            // longueur d'un cote de la grille
 int cotebloc;              // longueur d'un bloc
 int coupsdegomme;          // nombre d'effacement d'essai pendant une resolution
-long ameliorations;         // nombre d'amelioration "smart" deposees
+long ameliorations1;       // nombre d'amelioration "smart" deposees
+long ameliorations2;       // nombre d'amelioration "smart" deposees (deuxieme type d'amelioration)
 char nomfichier[255] = ""; // contiendra le fichier a traiter
 
 void print_grid(int t[]);
@@ -19,11 +20,13 @@ int write_grid(char fichier[255], int t[]);
 int check_grid(int t[], int b[][cotegrille]);
 void copy_grid(int tsource[], int tdestination[]);
 void enhance_grid(int t[], int b[][cotegrille]);
+void enhance_grid2(int t[], int b[][cotegrille]);
 
 int manque_sur_ligne(int val, int rang, int t[]);
 int manque_sur_colonne(int val, int rang, int t[]);
 int manque_dans_bloc(int val, int rang, int t[], int b[][cotegrille]);
 int depose_amelioration(int rang, int t[], int b[][cotegrille]);
+int depose_amelioration2(int rang, int t[], int b[][cotegrille]);
 
 int main()
 {
@@ -46,6 +49,8 @@ int main()
 
     printf("\nEntrez le nom du fichier de grille svp : ");
     scanf("%254s", nomfichier);
+    // pour faciliter les tests
+    strcpy(nomfichier, "3x3_20minutes_3786.txt");
 
     // Chargement de la grille a partir d'un fichier externe
     if (read_grid(nomfichier, grille) == 0)
@@ -55,8 +60,6 @@ int main()
     }
     printf("\n");
     print_grid(grille);
-
-    //    return 0; // a enlever le temps de blinder la lecture de la grille
 
     // creation des cases de la grille remplies avec les indices
     // il nous faut "cotegrille" blocs, chaque bloc contiendra "cotegrille" indices
@@ -125,17 +128,32 @@ int main()
     // avec la grille chargee et valide on va creer une grille de travail pour la methode intelligente
     int grilletravail[len];
     copy_grid(grille, grilletravail);
-    ameliorations = 0;
+    ameliorations1 = 0;
     enhance_grid(grilletravail, blocs);
     printf("\n");
     print_grid(grilletravail);
     printf("\n");
-    printf("Nombre d'ameliorations trouvees: %d\n", ameliorations);
+    printf("Nombre d'ameliorations trouvees: %d\n", ameliorations1);
+
+    // et une deuxieme pour la deuxieme methode d'ailleurs...
+    int grilletravail2[len];
+    copy_grid(grille, grilletravail2);
+    ameliorations2 = 0;
+    enhance_grid2(grilletravail2, blocs);
+    printf("\n");
+    print_grid(grilletravail2);
+    printf("\n");
+    printf("Nombre d'ameliorations trouvees (deuxieme methode): %d\n", ameliorations2);
 
     // uniquement si on a pu ameliorer la grille
-    if (ameliorations > 0)
+    // pour l'instant on ne cherche pas à combiner les deux methodes malines ensembles mais ca viendra
+    if (ameliorations1 > 0)
     {
         resolution(grilletravail, blocs, ".malin.resultat.txt");
+    }
+    if (ameliorations2 > 0)
+    {
+        resolution(grilletravail2, blocs, ".malin2.resultat.txt");
     }
     resolution(grille, blocs, ".resultat.txt");
 
@@ -486,7 +504,110 @@ int depose_amelioration(int rang, int t[], int b[][cotegrille])
     {
         //printf("amelioration rang %d : solution posee %d\n", rang, solutions[0]);
         t[rang] = solutions[0];
-        ameliorations++;
+        ameliorations1++;
+        return 1;
+    }
+    return 0;
+}
+
+void enhance_grid2(int t[], int b[][cotegrille])
+{
+    // dans cette strategie on va observer chaque bloc et regarder si on peut mettre une solution a coup sur
+    // par coup sur on entend par exemple : 5 n'est pas dans le bloc (ni dans la ligne, ni dans la colonne)
+    // est ce que l'on peut mettre 5 dans le bloc mais à un seul endroit ?
+    // pour chaque bloc on cherche les elements manquants pour voir si leur place peut etre unique
+    // auquel cas ce sera une solution
+
+    int positiondansgrille = 0; // position de depart qui va croitre de n a chaque fois
+
+    // creation des tableaux de valeurs manquantes a cet instant
+    for (int blocencours = 0; blocencours < cotegrille; blocencours++)
+    {
+        int indexvalmanquantes = 0;
+        int valmanquantes[cotegrille];
+        for (int p = 0; p < cotegrille; p++)
+        {
+            valmanquantes[p] = 0;
+        }
+        for (int i = 0; i < cotegrille; i++)
+        {
+            //printf("(%d) ", b[blocencours][i]);
+            if (manque_dans_bloc(i, b[blocencours][i], t, b) == 1)
+            {
+                valmanquantes[indexvalmanquantes] = i;
+                indexvalmanquantes++;
+            }
+        }
+        printf("Valeurs manquantes pour bloc %d : ", blocencours);
+        for (int p = 0; p < cotegrille; p++)
+        {
+            printf("%d ", valmanquantes[p]);
+        }
+        printf("\n");
+        indexvalmanquantes = 0; // on repart au debut du tableau
+        // le code ci dessous est INCOMPLET il manque le test si t[x] !=0 et une boucle au dessus
+        // on reprendra ça plus tard...
+        while (valmanquantes[indexvalmanquantes] > 0)
+        {
+            int flagvalmanquante = 0;
+            int bonneposition = 0;
+            for (int i = 0; i < cotegrille; i++)
+            {
+                if (manque_sur_ligne(valmanquantes[indexvalmanquantes], b[blocencours][i], t) == 1 && manque_sur_colonne(valmanquantes[indexvalmanquantes], b[blocencours][i], t) == 1 && manque_dans_bloc(valmanquantes[indexvalmanquantes], b[blocencours][i], t, b) == 1)
+                {
+                    flagvalmanquante++; // on a une solution
+                    bonneposition = i;
+                }
+            }
+            if (flagvalmanquante == 1) // si au final on a qu'une seule solution dans le bloc
+            {
+                t[b[blocencours][bonneposition]] = valmanquantes[indexvalmanquantes];
+            }
+            indexvalmanquantes++;
+        }
+    }
+
+    /*
+    int amelioration2 = 1; // sera mis a 1 chaque fois qu'une amelioration aura eu lieu
+    while (amelioration2 > 0)
+    {
+        amelioration2 = 0;
+        for (int i = 0; i < len; i++)
+        {
+            if (t[i] == 0)
+            {
+                //printf("essai amelioration au rang %d (valeur actuelle %d)\n", i, t[i]);
+                amelioration2 = amelioration2 + depose_amelioration2(i, t, b);
+            }
+        }
+    }
+    */
+}
+
+int depose_amelioration2(int rang, int t[], int b[][cotegrille])
+{
+
+    int nb_solutions_possibles = 0;
+    int index_solutions = 0;
+    int solutions[cotegrille];
+
+    // il faut parcourir entre 1 et le cotegrille +1
+    for (int k = 1; k < cotegrille + 1; k++)
+    {
+        if (manque_sur_ligne(k, rang, t) == 1 && manque_sur_colonne(k, rang, t) == 1 && manque_dans_bloc(k, rang, t, b) == 1)
+        {
+            solutions[index_solutions] = k;
+            index_solutions++;
+            nb_solutions_possibles++;
+        }
+    }
+
+    // si une seule solution trouvee alors on l'ecrit (et c'est forcement la premiere entree du tableau solutions)
+    if (nb_solutions_possibles == 1)
+    {
+        //printf("amelioration rang %d : solution posee %d\n", rang, solutions[0]);
+        t[rang] = solutions[0];
+        ameliorations2++;
         return 1;
     }
     return 0;
