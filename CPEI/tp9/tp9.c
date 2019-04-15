@@ -29,25 +29,33 @@ int taille_liste(list *l);
 list *renverse_liste(list *l);
 
 /* Exercice 2 */
-int valeur_a_la_position_list(list *l, int i);
-int position_de_la_premiere_valeur_list(list *l, int valeur);
+int valeur_a_la_position_liste(list *l, int i);
+int position_de_la_premiere_valeur_liste(list *l, int valeur);
+int indice_minimum_liste(list *l);
 
 int main()
 {
-    int tableau[10] = {5, 6, 7, 2, 3, 10, 4, 1, 0, 1};
+    int tableau[10] = {5, 6, 7, 2, 3, 10, 4, 1, 0, 12};
 
     list *maliste = new_list(tableau, 10);
+    printf("\n");
     affiche_liste(maliste);
-    printf("\nLa liste contient %d elements.\n\n", taille_liste(maliste));
+    printf("\nLa liste contient %d elements.\n", taille_liste(maliste));
 
     list *malisteinversee = renverse_liste(maliste);
+    printf("\n");
     affiche_liste(malisteinversee);
 
-    printf("\nL'element 3 de la premiere liste est : %d\n", valeur_a_la_position_list(maliste, 3));
-    printf("\nL'element 15 de la premiere liste est : %d\n", valeur_a_la_position_list(maliste, 15));
+    printf("\nL'element 3 de la premiere liste est : %d\n", valeur_a_la_position_liste(maliste, 3));
+    printf("\nL'element 15 de la premiere liste est : %d\n", valeur_a_la_position_liste(maliste, 15));
 
-    printf("\nLa premiere valeur 1 est a la position : %d\n", position_de_la_premiere_valeur_list(maliste, 1));
-    printf("\nLa premiere valeur 99 est a la position : %d\n", position_de_la_premiere_valeur_list(maliste, 99));
+    printf("\nLa premiere valeur 1 est a la position : %d\n", position_de_la_premiere_valeur_liste(maliste, 1));
+    printf("\nLa premiere valeur 99 est a la position : %d\n", position_de_la_premiere_valeur_liste(maliste, 99));
+
+    printf("\n");
+    affiche_liste(maliste);
+
+    printf("\nL'indice du minimum de la liste est : %d\n", indice_minimum_liste(maliste));
 }
 
 void affiche_liste(list *l)
@@ -92,7 +100,7 @@ list *renverse_liste(list *l)
     return retour;
 }
 
-int valeur_a_la_position_list(list *l, int i)
+int valeur_a_la_position_liste(list *l, int i)
 {
     int indice = 0;
     while (l != NULL) // on balaye la liste
@@ -111,7 +119,7 @@ int valeur_a_la_position_list(list *l, int i)
     return -1; // on est pas arrive a i car la liste s'est terminee avant
 }
 
-int position_de_la_premiere_valeur_list(list *l, int valeur)
+int position_de_la_premiere_valeur_liste(list *l, int valeur)
 {
     int indice = 0;
     while (l != NULL) // on balaye la liste
@@ -128,4 +136,27 @@ int position_de_la_premiere_valeur_list(list *l, int valeur)
     }
     // remarque au dernier coup on a pu avancer dans le vide et donc le while s'interrompt.
     return -1; // on est pas arrive a la valeur car la liste s'est terminee avant
+}
+
+int indice_minimum_liste(list *l)
+{
+    int taille = taille_liste(l);
+    if (taille == 0)
+    {
+        printf("ERREUR: la liste est vide.\n");
+        return INT_MIN;
+    }
+    int indice = 0, indice_minimum = 0;
+    int minimum = l->head; // on initialise le minimum avec la premiere valeur
+    while (l != NULL) // on balaye la liste
+    {
+        if (l->head <= minimum) // on a trouve plus petit ou egal
+        {
+            minimum = l->head;
+            indice_minimum = indice;
+        }
+        l = l->queue; // on avance
+        indice++;
+    }
+    return indice_minimum;
 }
