@@ -9,6 +9,23 @@ struct list
     list *queue;
 };
 
+typedef struct humain humain;
+struct humain
+{
+    int age;
+    char nom;
+    char prenom;
+    humain *suivant;
+};
+
+typedef struct
+{
+    int age;
+    char nom;
+    char prenom;
+    humain2 *suivant;
+} humain2;
+
 list *new_list(int array[], int len)
 {
     list *lst = NULL;
@@ -93,7 +110,7 @@ int main()
     list *recherche = reach_member_list(maliste, 6);
     printf("\nLa valeur recherchee est %d\n", recherche->head);
     display_list(maliste);
-    
+
     list *malisteajoutee = add_to_list_after_position(maliste, 8, 4);
     printf("\nApres ajout de %d en position %d\n", 8, 4);
     display_list(malisteajoutee);
@@ -109,7 +126,6 @@ int main()
     malisteajoutee = add_to_list_after_position(malisteajoutee, 19, 13);
     printf("\nApres ajout de %d en position %d\n", 19, 13);
     display_list(malisteajoutee);
-
 }
 
 void display_list(list *l)
