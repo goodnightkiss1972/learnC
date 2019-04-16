@@ -38,6 +38,11 @@ list *echange_dans_liste(list *l, int src, int dest);
 int indice_minimum_apres_liste(list *l, int apres);
 list *trie_liste(list *l);
 
+/* Supplements */
+list *add_to_list(list *l, int newhead);
+list *reach_member_list(list *l, int member);
+list *add_to_list_after_position(list *l, int newhead, int position);
+
 int main()
 {
     int tableau[10] = {5, 6, 7, 1, 3, 10, 4, 2, 9, 0};
@@ -75,6 +80,36 @@ int main()
     list *malistetriee = trie_liste(maliste);
     printf("\nApres tri\n");
     affiche_liste(malistetriee);
+
+    printf("\nApres ajout de 8 au debut\n");
+    malistetriee = add_to_list(malistetriee, 8);
+    affiche_liste(malistetriee);
+
+    printf("\nApres ajout de 11 au debut et tri dans la foulee\n");
+    malistetriee = trie_liste(add_to_list(malistetriee, 11));
+    affiche_liste(malistetriee);
+
+    // presque equivalent a "valeur_a_la_position_liste" sauf qu'ici c'est le type list qui est retourne
+    list *recherche = reach_member_list(maliste, 6);
+    printf("\nLa valeur recherchee est %d\n", recherche->head);
+    affiche_liste(maliste);
+    
+    list *malisteajoutee = add_to_list_after_position(maliste, 8, 4);
+    printf("\nApres ajout de %d en position %d\n", 8, 4);
+    affiche_liste(malisteajoutee);
+
+    malisteajoutee = add_to_list_after_position(malisteajoutee, 15, 0);
+    printf("\nApres ajout de %d en position %d\n", 15, 0);
+    affiche_liste(malisteajoutee);
+
+    malisteajoutee = add_to_list_after_position(malisteajoutee, 12, 11);
+    printf("\nApres ajout de %d en position %d\n", 12, 11);
+    affiche_liste(malisteajoutee);
+
+    malisteajoutee = add_to_list_after_position(malisteajoutee, 19, 13);
+    printf("\nApres ajout de %d en position %d\n", 19, 13);
+    affiche_liste(malisteajoutee);
+
 }
 
 void affiche_liste(list *l)
@@ -266,4 +301,45 @@ list *trie_liste(list *l)
     printf("\nIndice minimum apres 10 : %d", indice_minimum_apres_liste(tri, 10));
 */
     return tri;
+}
+
+list *add_to_list(list *l, int newhead)
+{
+    list *newlist = malloc(sizeof(list));
+    newlist->head = newhead;
+    newlist->queue = l;
+    return newlist;
+}
+
+list *reach_member_list(list *l, int member)
+{
+    if (member > taille_liste(l) - 1)
+    {
+        printf("\nERREUR: impossible d'atteindre l'element %d.\n", member);
+        return NULL;
+    }
+    int indice = 0;
+    while (l != NULL)
+    {
+        if (indice == member)
+        {
+            return l;
+        }
+        l = l->queue;
+        indice++;
+    }
+}
+
+list *add_to_list_after_position(list *l, int newhead, int position)
+{
+    if (position > taille_liste(l))
+    {
+        printf("\nERREUR: la position est hors limite, impossible d'inserer l'element en position %d.\n", position);
+        return l;
+    }
+    // on ajoute le nouveau membre au debut
+    list *newlist = add_to_list(l, newhead);
+    // ensuite on permute avec la fonction adequate
+    newlist = echange_dans_liste(newlist, 0, position);
+    return newlist;
 }
