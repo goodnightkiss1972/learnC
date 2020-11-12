@@ -2,6 +2,10 @@
 
 # ignore all executables
 *.exe
+*.out
+
+# ignore emacs backup
+*.*~
 
 # ignore all vscode content
 .vscode/
