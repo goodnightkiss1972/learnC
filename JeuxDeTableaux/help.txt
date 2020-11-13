@@ -1,0 +1,47 @@
+http://www.bien-programmer.fr/qsort.htm
+
+Description de la fonction qsort()
+Introduction
+La fonction qsort() implémente un algorithme de tri non spécifié qui permet de trier tout ou partie de n'importe quel tableau de données, du moment qu'il existe un critère de tri dans les données. Elle s'appuie sur une fonction utilisateur qui se charge d'exprimer le critère de tri.
+
+C'est l'implémentation qui décide quel algorithme est utilisé. En général, l'algorithme est choisi pour sa performance. Il n'est pas rare que ce soit un Quick Sort.
+
+Interface
+Le prototype de la fonction qsort() est
+
+void qsort (void *tableau
+            , size_t nb_elem
+            , size_t taille_elem
+            , int (*compare) (void const *a, void const *b));
+Les paramètres sont
+
+void *tableau
+: C'est l'adresse du premier élément du tableau à trier. La partie à trier doit être modifiable.
+size_t nb_elem
+: C'est le nombre d'éléments du tableau à trier (à ne pas confondre avec sa taille) :
+Par exemple, tout le tableau :
+sizeof tab / sizeof *tab
+.
+size_t taille_elem
+: C'est la taille d'un élément du tableau :
+sizeof *tab
+.
+int (*compare) (void const *a, void const *b)
+: c'est l'adresse de la fonction de comparaison (pointeur de fonction). Cette fonction est fournie par l'utilisateur.
+Interface de la fonction de comparaison
+Cette fonction dispose de 2 paramètres :
+
+void const *a
+: C'est l'adresse d'un des éléments du tableau en cours d'évaluation par l'algorithme. Il est qualifié 'const', car la fonction de comparaison ne doit en aucun cas en modifier le contenu sous peine de comportement indéfini.
+void const *b
+: C'est l'adresse d'un autre élément du tableau en cours d'évaluation par l'algorithme. Il est qualifié 'const', car la fonction de comparaison ne doit en aucun cas en modifier le contenu sous peine de comportement indéfini.
+de plus, elle doit retourner un int qui prend la valeur suivante (tri croissant) :
+
+0 si le critère de a est égal au critère de b
+< 0 si le critère de a est inférieur au critère de b
+> 0 si le critère de a est supérieur au critère de b
+Comportement
+La fonction qsort() effectue le tri du tableau selon le critère indiqué. La valeur rétournée par la fonction de comparaison permet à l'algorithme de prendre les décisions qui s'imposent.
+
+Comportement de la fonction de comparaison
+La fonction de comparaison reçoit l'adresse des 2 éléments en cours d'évaluation. Par l'intérmédiare de pointeurs locaux typés et initialisés avec ces paramètres, elle doit evaluer le critère de tri et retourner un int de la valeur résultant de l'évaluation. Pour un entier, une simple différence suffit. Pour une chaine, str[n]cmp() a été conçue pour ça. Pour un réel, c'est plus délicat, car la notion d'égalité est soumise à l'appréciation d'un EPSILON qui dépend de la précision recherchée.
