@@ -52,7 +52,37 @@ Carte versCarte(int n){
 }
 
 void affiche_carte(Carte c) {
-  printf("%d %d \n", c.valeur, c.couleur);
+  printf("%d %d - ", c.valeur, c.couleur);
+  // Pique, Trefle, Coeur, Carreau
+  // char symboles[15+1] = {226, 153, 160, '-', 226, 153, 163, '-', 226, 153, 165, '-', 226, 153, 166, 0};
+  char affichage[4];
+  switch (c.valeur) {
+    case AS: affichage[0] = 'A'; break;
+    case DEUX: affichage[0] = '2'; break;
+    case TROIS: affichage[0] = '3'; break;
+    case QUATRE: affichage[0] = '4'; break;
+    case CINQ: affichage[0] = '5'; break;
+    case SIX: affichage[0] = '6'; break;
+    case SEPT: affichage[0] = '7'; break;
+    case HUIT: affichage[0] = '8'; break;
+    case NEUF: affichage[0] = '9'; break;
+    case DIX: affichage[0] = 'X'; break;
+    case VALET: affichage[0] = 'V'; break;
+    case DAME: affichage[0] = 'D'; break;
+    case ROI: affichage[0] = 'R'; break;
+    default: affichage[0] = '-';
+  }
+  affichage[1] = 226;
+  affichage[2] = 153;
+  switch (c.couleur) {
+    case TREFLE: affichage[3] = 163; break;
+    case CARREAU: affichage[3] = 166; break;
+    case COEUR: affichage[3] = 165; break;
+    case PIQUE: affichage[3] = 160; break;
+    default: affichage[3] = '-';
+    }
+  fprintf(stdout, "%s\n", affichage);
+
 }
 
 Carte creer_Carte(int valeur, int couleur) {
@@ -61,19 +91,13 @@ Carte creer_Carte(int valeur, int couleur) {
 }
 
 int main(){
-    struct Carte c1;
-    c1.valeur = CINQ;
-    c1.couleur = COEUR;
-    struct Carte c2;
-    c2.valeur = CINQ;
-    c2.couleur = PIQUE;
-    struct Carte c3;
-    c3.valeur = ROI;
-    c3.couleur= PIQUE;
-    struct Carte hand1[3]={c1,c2,c3};
-    struct Carte hand2[3]={c3,c2,c1};
-    int a = estTrie(hand1,3);
-    int b = estTrie(hand2,3);
+  Carte c1 = creer_Carte(CINQ, COEUR);
+  Carte c2 = creer_Carte(CINQ, PIQUE);
+  Carte c3 = creer_Carte(ROI, PIQUE);
+  Carte hand1[3]={c1,c2,c3};
+  Carte hand2[3]={c3,c2,c1};
+  int a = estTrie(hand1,3);
+  int b = estTrie(hand2,3);
     printf("--- test de la fonction plusPetit --- \n");
     printf("%d\n",plusPetit(c1,c2));
     printf("--- test de la fonction estTrie --- \n");
@@ -98,7 +122,7 @@ int main(){
     printf("Creation du paquet standard 52 cartes pour le poker.\n");
     Carte paquet[52];
     int i = 0;
-    for (int couleur = 0; couleur <= 3; couleur++) {
+    for (int couleur = 0; couleur <= 39; couleur +=13) {
       for (int valeur = 0; valeur <= 12; valeur++) {
 	//printf("valeur = %d / couleur = %d \n", valeur, couleur);
 	paquet[i] = creer_Carte(valeur, couleur);
@@ -108,5 +132,7 @@ int main(){
     for (int i = 0; i < 52; i++) {
       affiche_carte(paquet[i]);
     }
+    char symboles[15+1] = {226, 153, 160, '-', 226, 153, 163, '-', 226, 153, 165, '-', 226, 153, 166, 0};
+    fprintf(stdout, "%s\n", symboles);
 }
 
