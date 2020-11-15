@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef enum {AS, DEUX, TROIS, QUATRE, CINQ, SIX, SEPT, HUIT, NEUF, DIX, VALET, DAME, ROI} valeur_carte;
+typedef enum {AS = 1, DEUX, TROIS, QUATRE, CINQ, SIX, SEPT, HUIT, NEUF, DIX, VALET, DAME, ROI} valeur_carte;
 typedef enum {TREFLE=0, CARREAU=13, COEUR=26, PIQUE=39} couleur_carte;
 
 typedef struct Carte Carte; // permet de manipuler directement le type "Carte" sans mettre le mot cle "struct" devant...
@@ -40,7 +40,7 @@ int versNombre(Carte c){
 
 Carte versCarte(int n){
     Carte c;
-    if (n<=12){
+    if (n<=13){
         c.valeur = n;
         c.couleur = 0;
     }
@@ -52,7 +52,6 @@ Carte versCarte(int n){
 }
 
 void affiche_carte(Carte c) {
-  printf("%d %d - ", c.valeur, c.couleur);
   // Pique, Trefle, Coeur, Carreau
   // char symboles[15+1] = {226, 153, 160, '-', 226, 153, 163, '-', 226, 153, 165, '-', 226, 153, 166, 0};
   char affichage[4];
@@ -81,8 +80,7 @@ void affiche_carte(Carte c) {
     case PIQUE: affichage[3] = 160; break;
     default: affichage[3] = '-';
     }
-  fprintf(stdout, "%s\n", affichage);
-
+  fprintf(stdout, "%s : %d + %d = %d\n", affichage, c.valeur, c.couleur, c.valeur + c.couleur);
 }
 
 Carte creer_Carte(int valeur, int couleur) {
@@ -98,8 +96,13 @@ int main(){
   Carte hand2[3]={c3,c2,c1};
   int a = estTrie(hand1,3);
   int b = estTrie(hand2,3);
-    printf("--- test de la fonction plusPetit --- \n");
-    printf("%d\n",plusPetit(c1,c2));
+    printf("--- test de la fonction plusPetit : vrai (1) car 5COEUR plus petit que 5PIQUE --- \n");
+    affiche_carte(c1);
+    affiche_carte(c2);
+    printf("--- test de la fonction plusPetit : faux (0) car 5PIQUE plus grand que 5COEUR --- \n");
+    affiche_carte(c2);
+    affiche_carte(c1);
+    printf("%d\n",plusPetit(c2,c1));
     printf("--- test de la fonction estTrie --- \n");
     printf("%d\n",a);
     printf("%d\n",b);
@@ -114,17 +117,16 @@ int main(){
     printf("%d\n",c5.valeur);
     printf("%d\n",c5.couleur);
 
-    printf("--- un autre test des fonctions versNombre versCarte combinés : les deux affichages suivants doivent etre 5 0--- \n");
+    printf("--- un autre test des fonctions versNombre versCarte combinés : les deux affichages suivants doivent etre 6+ 0 = 6 --- \n");
     struct Carte fab1 = {SIX, TREFLE};
     affiche_carte(fab1);
     affiche_carte(versCarte(versNombre(fab1)));
 
-    printf("Creation du paquet standard 52 cartes pour le poker.\n");
+    printf("Creation du paquet standard 52 cartes.\n");
     Carte paquet[52];
     int i = 0;
     for (int couleur = 0; couleur <= 39; couleur +=13) {
-      for (int valeur = 0; valeur <= 12; valeur++) {
-	//printf("valeur = %d / couleur = %d \n", valeur, couleur);
+      for (int valeur = 1; valeur <= 13; valeur++) {
 	paquet[i] = creer_Carte(valeur, couleur);
 	i++;
       }
@@ -132,7 +134,5 @@ int main(){
     for (int i = 0; i < 52; i++) {
       affiche_carte(paquet[i]);
     }
-    char symboles[15+1] = {226, 153, 160, '-', 226, 153, 163, '-', 226, 153, 165, '-', 226, 153, 166, 0};
-    fprintf(stdout, "%s\n", symboles);
 }
 
