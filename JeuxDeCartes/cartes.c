@@ -51,7 +51,7 @@ Carte versCarte(int n){
     return c;
 }
 
-void affiche_carte(Carte c) {
+void affiche_Carte(Carte c) {
   // Pique, Trefle, Coeur, Carreau
   // char symboles[15+1] = {226, 153, 160, '-', 226, 153, 163, '-', 226, 153, 165, '-', 226, 153, 166, 0};
   char affichage[4];
@@ -80,7 +80,16 @@ void affiche_carte(Carte c) {
     case PIQUE: affichage[3] = 160; break;
     default: affichage[3] = '-';
     }
-  fprintf(stdout, "%s : %d + %d = %d\n", affichage, c.valeur, c.couleur, c.valeur + c.couleur);
+  //  fprintf(stdout, "%s : %d + %d = %d", affichage, c.valeur, c.couleur, c.valeur + c.couleur);
+  fprintf(stdout, "%s ", affichage);
+
+}
+
+void affiche_tas(Carte tas[], int taille) {
+  for (int i=0; i < taille; i++) {
+    affiche_Carte(tas[i]);
+  }
+  printf("\n");
 }
 
 Carte creer_Carte(int valeur, int couleur) {
@@ -97,11 +106,15 @@ int main(){
   int a = estTrie(hand1,3);
   int b = estTrie(hand2,3);
     printf("--- test de la fonction plusPetit : vrai (1) car 5COEUR plus petit que 5PIQUE --- \n");
-    affiche_carte(c1);
-    affiche_carte(c2);
+    affiche_Carte(c1);
+    printf("\n");
+    affiche_Carte(c2);
+    printf("\n");
     printf("--- test de la fonction plusPetit : faux (0) car 5PIQUE plus grand que 5COEUR --- \n");
-    affiche_carte(c2);
-    affiche_carte(c1);
+    affiche_Carte(c2);
+    printf("\n");
+    affiche_Carte(c1);
+    printf("\n");
     printf("%d\n",plusPetit(c2,c1));
     printf("--- test de la fonction estTrie --- \n");
     printf("%d\n",a);
@@ -119,8 +132,10 @@ int main(){
 
     printf("--- un autre test des fonctions versNombre versCarte combinés : les deux affichages suivants doivent etre 6+ 0 = 6 --- \n");
     struct Carte fab1 = {SIX, TREFLE};
-    affiche_carte(fab1);
-    affiche_carte(versCarte(versNombre(fab1)));
+    affiche_Carte(fab1);
+    printf("\n");
+    affiche_Carte(versCarte(versNombre(fab1)));
+    printf("\n");
 
     printf("Creation du paquet standard 52 cartes.\n");
     Carte paquet[52];
@@ -131,8 +146,6 @@ int main(){
 	i++;
       }
     }
-    for (int i = 0; i < 52; i++) {
-      affiche_carte(paquet[i]);
-    }
+    affiche_tas(paquet, 52);
 }
 
