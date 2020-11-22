@@ -4,50 +4,69 @@
 typedef enum {AS = 1, DEUX, TROIS, QUATRE, CINQ, SIX, SEPT, HUIT, NEUF, DIX, VALET, DAME, ROI} valeur_carte;
 typedef enum {TREFLE=0, CARREAU=13, COEUR=26, PIQUE=39} couleur_carte;
 
-typedef struct Carte Carte; // permet de manipuler directement le type "Carte" sans mettre le mot cle "struct" devant...
+typedef struct Carte Carte;
 struct Carte {
   valeur_carte valeur;
   couleur_carte couleur;
+  int rang;
 };
 
-int est_plus_petit(Carte c1, Carte c2) {
-  int resultat = 0; //0 si c1 > c2, 1 si c1 < c2
-  if (c1.valeur < c2.valeur) {
-    resultat = 1;
-  }
-  if (c1.valeur == c2.valeur && c1.couleur < c2.couleur) {
-    resultat = 1;
-  }
-  return resultat;
-}
+int carte_vers_nombre(Carte c);
+Carte nombre_vers_carte(int n);
+Carte creer_carte_bataille(int valeur, int couleur);
+void affiche_carte(Carte c);
 
-int est_trie(Carte *hand, int taille) {
-  int resultat = 1; //1 triée, 0 sinon
-  for (int i = 0; i<taille; i++) {
-    Carte c1 = *(hand+i);
-    Carte c2 = *(hand+1+i);
-    if((est_plus_petit(c1,c2))==0) {
-      resultat = 0;
+int est_plus_petit(Carte c1, Carte c2);
+int est_trie(Carte *hand, int taille);
+void affiche_liste_carte(Carte liste[], int taille);
+
+typedef struct Joueur Joueur;
+struct Joueur {
+  char prenom[12];
+  int jeu[];
+};
+
+void tests();
+
+int main() {
+
+  printf("Creation du paquet standard 52 cartes pour la bataille.\n");
+  Carte paquet[52];
+  int i = 0;
+  for (int couleur = 0; couleur <= 39; couleur +=13) {
+    for (int valeur = 1; valeur <= 13; valeur++) {
+      paquet[i] = creer_carte_bataille(valeur, couleur);
+      i++;
     }
   }
-  return resultat;
+  affiche_liste_carte(paquet, 52);
+
 }
 
-int carte_vers_poids(Carte c) {
+int carte_vers_nombre(Carte c) {
   return c.valeur + c.couleur;
 }
 
-Carte poids_vers_carte(int n) {
-  Carte c;
+Carte nombre_vers_carte(int n) {
+  valeur_carte valeur;
+  couleur_carte couleur;
   if (n<=13) {
-    c.valeur = n;
-    c.couleur = 0;
+    valeur = n;
+    couleur = 0;
   }
   else {
-    c.valeur = n%13;
-    c.couleur = n/13 * 13;
+    valeur = n%13;
+    couleur = n/13 * 13;
   }
-    return c;
+  Carte c = creer_carte_bataille(valeur, couleur);
+  return c;
+}
+
+Carte creer_carte_bataille(int valeur, int couleur) {
+  Carte c = { valeur, couleur };
+  // a la bataille les cartes ont constamment le même rang, pas d'atout donc le rang ne change pas
+  c.rang = carte_vers_nombre(c);
+  return c;
 }
 
 void affiche_carte(Carte c) {
@@ -80,26 +99,46 @@ void affiche_carte(Carte c) {
     default: affichage[3] = '-';
     }
   //  fprintf(stdout, "%s : %d + %d = %d", affichage, c.valeur, c.couleur, c.valeur + c.couleur);
-  fprintf(stdout, "%s ", affichage);
-
+  fprintf(stdout, "%s (%d) ", affichage, c.rang);
+  //  fprintf(stdout, "%s ", affichage);
 }
 
-void affiche_tas(Carte tas[], int taille) {
+int est_plus_petit(Carte c1, Carte c2) {
+  int resultat = 0; //0 si c1 > c2, 1 si c1 < c2
+  if (c1.valeur < c2.valeur) {
+    resultat = 1;
+  }
+  if (c1.valeur == c2.valeur && c1.couleur < c2.couleur) {
+    resultat = 1;
+  }
+  return resultat;
+}
+
+int est_trie(Carte *hand, int taille) {
+  int resultat = 1; //1 triée, 0 sinon
+  for (int i = 0; i<taille; i++) {
+    Carte c1 = *(hand+i);
+    Carte c2 = *(hand+1+i);
+    if((est_plus_petit(c1,c2))==0) {
+      resultat = 0;
+    }
+  }
+  return resultat;
+}
+
+void affiche_liste_carte(Carte liste[], int taille) {
   for (int i=0; i < taille; i++) {
-    affiche_carte(tas[i]);
+    affiche_carte(liste[i]);
+    printf("\n");
   }
   printf("\n");
 }
 
-Carte creer_carte(int valeur, int couleur) {
-  Carte c = { valeur, couleur };
-  return c;
-}
 
 void tests() {
-  Carte c1 = creer_carte(CINQ, COEUR);
-  Carte c2 = creer_carte(CINQ, PIQUE);
-  Carte c3 = creer_carte(ROI, PIQUE);
+  Carte c1 = creer_carte_bataille(CINQ, COEUR);
+  Carte c2 = creer_carte_bataille(CINQ, PIQUE);
+  Carte c3 = creer_carte_bataille(ROI, PIQUE);
   Carte hand1[3]={c1,c2,c3};
   Carte hand2[3]={c3,c2,c1};
   int a = est_trie(hand1,3);
@@ -119,36 +158,20 @@ void tests() {
   printf("%d\n",a);
   printf("%d\n",b);
   printf("--- test de la fonction versNombre --- \n");
-  printf("%d\n",carte_vers_poids(c1));
-  printf("%d\n",carte_vers_poids(c3));
+  printf("%d\n",carte_vers_nombre(c1));
+  printf("%d\n",carte_vers_nombre(c3));
   printf("--- test de la fonction versCarte --- \n");
-  struct Carte c4 = poids_vers_carte(13);
-  struct Carte c5 = poids_vers_carte(51);
+  struct Carte c4 = nombre_vers_carte(13);
+  struct Carte c5 = nombre_vers_carte(51);
   printf("%d\n",c4.valeur);
   printf("%d\n",c4.couleur);
   printf("%d\n",c5.valeur);
   printf("%d\n",c5.couleur);
 
-  printf("--- un autre test des fonctions versNombre versCarte combinés : les deux affichages suivants doivent etre 6+ 0 = 6 --- \n");
-  struct Carte fab1 = {SIX, TREFLE};
+  printf("--- un autre test des fonctions carte_vers_nombre & nombre_vers_carte combinés : les deux affichages suivants doivent etre 6+ 0 = 6 --- \n");
+  struct Carte fab1 = creer_carte_bataille(SIX, TREFLE);
   affiche_carte(fab1);
   printf("\n");
-  affiche_carte(poids_vers_carte(carte_vers_poids(fab1)));
+  affiche_carte(nombre_vers_carte(carte_vers_nombre(fab1)));
   printf("\n");
 }
-
-int main() {
-
-  printf("Creation du paquet standard 52 cartes.\n");
-  Carte paquet[52];
-  int i = 0;
-  for (int couleur = 0; couleur <= 39; couleur +=13) {
-    for (int valeur = 1; valeur <= 13; valeur++) {
-      paquet[i] = creer_carte(valeur, couleur);
-      i++;
-    }
-  }
-  affiche_tas(paquet, 52);
-
-}
-
