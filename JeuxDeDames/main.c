@@ -22,11 +22,14 @@
  * */
 void tests_S0(){
 	jeu *g =calloc(1,sizeof(jeu));
-	initBlank(g,12,12);
+	//initBlank(g,12,12);
+	init(g,5,6,2);
 	
+	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g); //afiche le damier de g dans le terminal
 	sleepcp(500);		// temporise pendant 500millisecondes
-		
+
+/*
 	setCaseVal(g,(position){1,1},PN); // ajout d'un pion noir	
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
@@ -40,7 +43,7 @@ void tests_S0(){
 	setCaseVal(g,(position){3,3},DNC); // ajout d'une dame noir capturee
 	resetTerm();
 	print_damier(g);
-	
+*/	
 	free(g->plateau); // pour eviter els fuites de memoire on libere g et son plateau
 	free(g);
 }

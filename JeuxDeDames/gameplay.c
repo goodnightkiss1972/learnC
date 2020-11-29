@@ -37,7 +37,32 @@ void initBlank(jeu *g, int nl, int nc) {
  * on peut utiliser initBlank pour commencer et ensuite on se sert de setCaseVal
  */
 void init(jeu* g, int nl, int nc, int nli){
-	// A ECRIRE S1
+	initBlank(g,nl,nc);
+	int i,j;
+	for (i = 0 ; i < nli ; i++){
+		if (i%2 == 0){
+			j = 0;
+		}
+		else{
+			j = 1;
+		}
+		for (j ; j < nc ; j+=2){
+			position p = {i,j};
+			setCaseVal(g,p,PB);
+		}
+	}
+	for (i = (nl - nli) ; i < nl ; i++){
+		if (i%2 == 0){
+			j = 0;
+		}
+		else{
+			j = 1;
+		}
+		for (j ; j < nc ; j+=2){
+			position p = {i,j};
+			setCaseVal(g,p,PN);
+		}
+	}
 }
 
 /* retourne 1 si les deux positions p et q ont les memes coordonnées et 0 sinon */
