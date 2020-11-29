@@ -91,6 +91,7 @@ int isValide(jeu* g,position p){
  * (par rapport aux dimensions NB_Lig et NB_Col du plateau)
  * */
 int isVide(jeu* g, position p){
+	/* les break sont inutile vu qu'on retourne dans les case... */
 	switch (getCaseVal(g, p)) {
 		//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
 		case VIDE : return 1; break;
@@ -102,6 +103,7 @@ int isVide(jeu* g, position p){
  * (NOCOL si la case est Vide)
  * */
 couleur getCouleur(jeu* g, position p){
+	/* les break sont inutile vu qu'on retourne dans les case... */
 	switch (getCaseVal(g, p)) {
 		//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
 		case DNC : case PNC : case PN : case DN : return NOIR; break;
@@ -114,6 +116,7 @@ couleur getCouleur(jeu* g, position p){
  * (NOTYPE si la case est Vide)
  * */
 typePiece getTypePiece(jeu* g, position p){
+	/* les break sont inutile vu qu'on retourne dans les case... */
 	switch (getCaseVal(g, p)) {
 		//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
 		case DNC : case DBC : case DN : case DB : return Dame; break;
@@ -124,6 +127,7 @@ typePiece getTypePiece(jeu* g, position p){
 
 /* retourne 1 si la position p dans *g est une piece capturee (voir type caseVal) et 0 sinon */
 int isCapture(jeu* g, position p){
+	/* les break sont inutile vu qu'on retourne dans les case... */
 	switch (getCaseVal(g, p)) {
 		//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
 		case DNC : case DBC : case PNC : case PBC : return 1; break;
@@ -133,7 +137,19 @@ int isCapture(jeu* g, position p){
 
 /* permet de switcher la valeur d'une position p de capturée à non capturée et vice versa */
 void switchCapture(jeu* g, position p){
-	// A ECRIRE S1
+	/* ici sans les break on prend un gros risque :-) ils sont indispensables */
+	switch (getCaseVal(g, p)) {
+		//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
+		case DNC : setCaseVal(g, p, DN); break;
+		case DBC : setCaseVal(g, p, DB); break;
+		case PNC : setCaseVal(g, p, PN); break;
+		case PBC : setCaseVal(g, p, PB); break;
+		case VIDE : setCaseVal(g, p, VIDE); break;
+		case PB : setCaseVal(g, p, PBC); break;
+		case PN : setCaseVal(g, p, PNC); break;
+		case DB : setCaseVal(g, p, DBC); break;
+		case DN : setCaseVal(g, p, DNC); break;
+	}
 }
 
 /* transforme en dames tous les pions qui sont arrives sur la rangee du fond adverse

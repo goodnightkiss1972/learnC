@@ -128,6 +128,20 @@ void tests_S0(){
 
 	//printf("test 10/10/4 doit etre egal a 1 : %d\n", test_plateau(g,10,10,4)); // plus valable car on a boulverse la grille
 
+	/* changeons le statut de capture et constatons l'effet graphiquement */
+	p.lig = 3;
+	p.col = 3;
+	switchCapture(g, p);
+	resetTerm();
+	print_damier(g);
+	sleepcp(500);
+	p.lig = 8;
+	p.col = 8;
+	switchCapture(g, p);
+	resetTerm();
+	print_damier(g);
+	sleepcp(500);
+
 
 	free(g->plateau); // pour eviter les fuites de memoire on libere g et son plateau
 	free(g);
