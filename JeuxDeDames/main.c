@@ -137,6 +137,23 @@ void tests_S0(){
 	print_damier(g);
 	sleepcp(500);
 
+	/* mouvement simule */
+	doDeplace(g, (position){3,1}, (position){4,0});
+	resetTerm(); //permet de reinitialiser l'affichage du terminal
+	print_damier(g);
+	sleepcp(1500);
+
+	/* prise simulee */
+	setCaseVal(g,(position){4,6},PN); // ajout d'un pion noir
+	resetTerm(); //permet de reinitialiser l'affichage du terminal
+	print_damier(g);
+	sleepcp(1500);
+	doMange(g, (position){3,5}, (position){5,7}, (position){4,6});
+	resetTerm(); //permet de reinitialiser l'affichage du terminal
+	print_damier(g);
+	sleepcp(1500);
+
+
 	free(g->plateau); // pour eviter les fuites de memoire on libere g et son plateau
 	free(g);
 }

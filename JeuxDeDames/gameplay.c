@@ -182,7 +182,6 @@ int promotion(jeu*g){
 			promus++;
 		}
 	}
-
 	return promus;
 }
 
@@ -191,7 +190,8 @@ int promotion(jeu*g){
  * en supposant que c'est bien un deplacement valide (sans verification)
  */
 void doDeplace(jeu*g, position deb, position fin){	
-	// A ECRIRE S1
+	setCaseVal(g, fin, getCaseVal(g, deb));
+	setCaseVal(g, deb, VIDE);
 }
 
 /*
@@ -199,7 +199,8 @@ void doDeplace(jeu*g, position deb, position fin){
  * en supposant que c'est bien une prise valide (sans aucune verification)
  */
 void doMange(jeu*g, position p, position q, position prise){
-	// A ECRIRE S1
+	doDeplace(g,p,q);
+	switchCapture(g,prise);
 }
 
 
