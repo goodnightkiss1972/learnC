@@ -67,25 +67,35 @@ void init(jeu* g, int nl, int nc, int nli){
 
 /* retourne 1 si les deux positions p et q ont les memes coordonnées et 0 sinon */
 int equals(position p,position q){
-	int resultat = 1;
-	if (p.lig != q.lig || p.col != q.col){
-		resultat = 0;
+	if (p.lig == q.lig && p.col == q.col){
+		return 1;
 	}
-	return resultat;
+	else
+	{
+		return 0;
+	}
 }
 
 /* retourne 1 si la position est bien dans le damier du jeu g et 0 sinon */
 int isValide(jeu* g,position p){
-	// A ECRIRE S1
-	return -1;
+	if (p.lig >= 0 && p.lig < g->NB_Lig && p.col >= 0 && p.col < g->NB_Col) {
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 /* retourne 1 si la position p est vide dans le damier du jeu g et 0 sinon
  * (par rapport aux dimensions NB_Lig et NB_Col du plateau)
  * */
 int isVide(jeu* g, position p){
-	// A ECRIRE S1
-	return -1;
+	switch (getCaseVal(g, p)) {
+		//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
+		case VIDE : return 1; break;
+		default : return 0; break;
+	}
 }
 
 /* retourne la couleur (du type enuméré couleur) de la position p dans le jeu *g 
@@ -114,8 +124,11 @@ typePiece getTypePiece(jeu* g, position p){
 
 /* retourne 1 si la position p dans *g est une piece capturee (voir type caseVal) et 0 sinon */
 int isCapture(jeu* g, position p){
-	// A ECRIRE S1
-	return 0;
+	switch (getCaseVal(g, p)) {
+		//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
+		case DNC : case DBC : case PNC : case PBC : return 1; break;
+		default : return 0; break;
+	}
 }
 
 /* permet de switcher la valeur d'une position p de capturée à non capturée et vice versa */

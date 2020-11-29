@@ -40,16 +40,26 @@ int test_plateau(jeu* g, int nl, int nc, int nli){
 }
 
 /* teste la couleur et le type a la position donnee */
-int test_case(jeu* g, position p, typePiece t, couleur c){
-//	printf("type : %d\n", t);
-//	printf("couleur : %d\n", c);
-	if (getCouleur(g, p) == c && getTypePiece(g, p) == t) {
+int test_case(jeu* g, position p, typePiece t, couleur c, int capture){
+	if (getCouleur(g, p) == c && getTypePiece(g, p) == t && isCapture(g, p) == capture) {
 		//printf("OK a la position (%d %d) nous avons bien un(e) %d de couleur %d.\n", p.lig, p.col, getTypePiece(g, p), getCouleur(g, p));
 		return 1;
 	}
 	else
 	{
-		printf("** ERREUR ** a la position (%d %d) nous avons un(e) %d de couleur %d.\n", p.lig, p.col, getTypePiece(g, p), getCouleur(g, p));
+		printf("** ERREUR ** a la position (%d %d) nous avons un(e) %d de couleur %d et capturee : %d\n", p.lig, p.col, getTypePiece(g, p), getCouleur(g, p), isCapture(g, p));
+		return 0;
+	}
+}
+
+/* teste la validite d'une position par rapport au jeu */
+int test_valide(jeu* g,position p, int attendu) {
+	if (isValide(g, p) == attendu) {
+		return 1;
+	}
+	else
+	{
+		printf("** ERREUR ** Cette position (%d %d) n'a pas le bon isValide pour le jeu.\n", p.lig, p.col);
 		return 0;
 	}
 }
@@ -81,15 +91,41 @@ void tests_S0(){
 	print_damier(g);
 	
 	position p;
+	/* normalement il faudrait ecrire un test specifique pour getCouleur, getTypePiece et isCapture
+	mais ici on fait les trois a la fois dans test_case */
 	p.lig = 1;
 	p.col = 3;
-	test_case(g, p, Pion, BLANC);
+	test_case(g, p, Pion, BLANC, 0);
 	p.lig = 2;
 	p.col = 1;
-	test_case(g, p, NOTYPE, NOCOL);
+	test_case(g, p, NOTYPE, NOCOL, 0);
 	p.lig = 8;
 	p.col = 8;
-	test_case(g, p, Dame, BLANC);
+	test_case(g, p, Dame, BLANC, 0);
+	p.lig = 3;
+	p.col = 3;
+	test_case(g, p, Dame, NOIR, 1);
+
+	/* test validite */
+	p.lig = 1;
+	p.col = -1;
+	test_valide(g,p,0);
+	p.lig = -1;
+	p.col = 1;
+	test_valide(g,p,0);
+	p.lig = 0;
+	p.col = 0;
+	test_valide(g,p,1);
+	p.lig = 9;
+	p.col = 9;
+	test_valide(g,p,1);
+	p.lig = 12;
+	p.col = 5;
+	test_valide(g,p,0);
+	p.lig = 6;
+	p.col = 11;
+	test_valide(g,p,0);
+
 	//printf("test 10/10/4 doit etre egal a 1 : %d\n", test_plateau(g,10,10,4)); // plus valable car on a boulverse la grille
 
 
