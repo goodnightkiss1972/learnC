@@ -67,8 +67,11 @@ void init(jeu* g, int nl, int nc, int nli){
 
 /* retourne 1 si les deux positions p et q ont les memes coordonnées et 0 sinon */
 int equals(position p,position q){
-	// A ECRIRE S1
-	return -1;
+	int resultat = 1;
+	if (p.lig != q.lig || p.col != q.col){
+		resultat = 0;
+	}
+	return resultat;
 }
 
 /* retourne 1 si la position est bien dans le damier du jeu g et 0 sinon */
@@ -89,16 +92,24 @@ int isVide(jeu* g, position p){
  * (NOCOL si la case est Vide)
  * */
 couleur getCouleur(jeu* g, position p){
-	// A ECRIRE S1
-	return -1;
+	switch (getCaseVal(g, p)) {
+		//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
+		case DNC : case PNC : case PN : case DN : return NOIR; break;
+		case DBC : case PBC : case PB : case DB : return BLANC; break;
+		case VIDE : return NOCOL; break;
+	}
 }
 
 /* retourne le type de piece de la position p dans le jeu *g 
  * (NOTYPE si la case est Vide)
  * */
 typePiece getTypePiece(jeu* g, position p){
-	// A ECRIRE S1
-	return -1;
+	switch (getCaseVal(g, p)) {
+		//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
+		case DNC : case DBC : case DN : case DB : return Dame; break;
+		case PNC : case PBC : case PN : case PB : return Pion; break;
+		case VIDE : return NOTYPE; break;
+	}
 }
 
 /* retourne 1 si la position p dans *g est une piece capturee (voir type caseVal) et 0 sinon */
