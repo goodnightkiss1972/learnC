@@ -156,8 +156,34 @@ void switchCapture(jeu* g, position p){
  * retourne le nombre de pions ainsi promus
  */
 int promotion(jeu*g){
-	// A ECRIRE S1
-	return -1;
+	int i = 0, j = 0;
+	position p;
+	int promus = 0;
+	int decalage = 0;
+	/* ligne 0 (BLANC) si un PN alors on le transforme en DN */
+	/* la ligne 0 etant paire on va avancer en suivant 0 2 4 etc */
+	for (i = 0; i < g->NB_Col; i+=2) {
+		p.lig = 0;
+		p.col = i;
+		if (getCaseVal(g,p) == PN) {
+			setCaseVal(g,p,DN);
+			promus++;
+		}
+	}
+	/* ligne NB_Lig-1 (NOIR) si un PB alors on le transforme en DB */
+	if (g->NB_Lig % 2 == 0) {
+		decalage++;
+	}
+	for (j = 0; j < g->NB_Col; j+=2) {
+		p.lig = g->NB_Lig-1;
+		p.col = j+decalage;
+		if (getCaseVal(g,p) == PB) {
+			setCaseVal(g,p,DB);
+			promus++;
+		}
+	}
+
+	return promus;
 }
 
 /*

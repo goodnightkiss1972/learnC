@@ -90,58 +90,52 @@ void tests_S0(){
 	resetTerm();
 	print_damier(g);
 	
-	position p;
 	/* normalement il faudrait ecrire un test specifique pour getCouleur, getTypePiece et isCapture
 	mais ici on fait les trois a la fois dans test_case */
-	p.lig = 1;
-	p.col = 3;
-	test_case(g, p, Pion, BLANC, 0);
-	p.lig = 2;
-	p.col = 1;
-	test_case(g, p, NOTYPE, NOCOL, 0);
-	p.lig = 8;
-	p.col = 8;
-	test_case(g, p, Dame, BLANC, 0);
-	p.lig = 3;
-	p.col = 3;
-	test_case(g, p, Dame, NOIR, 1);
+	test_case(g, (position){1,3}, Pion, BLANC, 0);
+	test_case(g, (position){2,1}, NOTYPE, NOCOL, 0);
+	test_case(g, (position){8,8}, Dame, BLANC, 0);
+	test_case(g, (position){3,3}, Dame, NOIR, 1);
 
 	/* test validite */
-	p.lig = 1;
-	p.col = -1;
-	test_valide(g,p,0);
-	p.lig = -1;
-	p.col = 1;
-	test_valide(g,p,0);
-	p.lig = 0;
-	p.col = 0;
-	test_valide(g,p,1);
-	p.lig = 9;
-	p.col = 9;
-	test_valide(g,p,1);
-	p.lig = 12;
-	p.col = 5;
-	test_valide(g,p,0);
-	p.lig = 6;
-	p.col = 11;
-	test_valide(g,p,0);
+	test_valide(g,(position){1,-1},0);
+	test_valide(g,(position){-1,1},0);
+	test_valide(g,(position){0,0},1);
+	test_valide(g,(position){9,9},1);
+	test_valide(g,(position){12,5},0);
+	test_valide(g,(position){6,11},0);
 
 	//printf("test 10/10/4 doit etre egal a 1 : %d\n", test_plateau(g,10,10,4)); // plus valable car on a boulverse la grille
 
 	/* changeons le statut de capture et constatons l'effet graphiquement */
-	p.lig = 3;
-	p.col = 3;
-	switchCapture(g, p);
+	switchCapture(g, (position){3,3});
 	resetTerm();
 	print_damier(g);
 	sleepcp(500);
-	p.lig = 8;
-	p.col = 8;
-	switchCapture(g, p);
+	switchCapture(g, (position){8,8});
 	resetTerm();
 	print_damier(g);
 	sleepcp(500);
 
+	/* promotion noir */
+	setCaseVal(g,(position){0,8},PN); // ajout d'un pion noir	
+	resetTerm(); //permet de reinitialiser l'affichage du terminal
+	print_damier(g);
+	sleepcp(1500);
+	promotion(g);
+	resetTerm(); //permet de reinitialiser l'affichage du terminal
+	print_damier(g);
+	sleepcp(500);
+
+	/* promotion blanc */
+	setCaseVal(g,(position){9,9},PB); // ajout d'un pion blanc
+	resetTerm(); //permet de reinitialiser l'affichage du terminal
+	print_damier(g);
+	sleepcp(1500);
+	promotion(g);
+	resetTerm(); //permet de reinitialiser l'affichage du terminal
+	print_damier(g);
+	sleepcp(500);
 
 	free(g->plateau); // pour eviter les fuites de memoire on libere g et son plateau
 	free(g);
