@@ -206,12 +206,35 @@ void doMange(jeu*g, position p, position q, position prise){
 
 /* annule la capture de toutes les pieces capturees du plateau */
 void undoCapture(jeu*g) {
-	// A ECRIRE S1
+	position p;
+	for (int i = 0; i < g->NB_Lig; i++){
+		for (int j = 0; j < g->NB_Col; j++){
+			p.lig = i;
+			p.col = j;
+			switch (getCaseVal(g, p)) {
+				//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
+				case DNC : setCaseVal(g, p, DN); break;
+				case DBC : setCaseVal(g, p, DB); break;
+				case PNC : setCaseVal(g, p, PN); break;
+				case PBC : setCaseVal(g, p, PB); break;
+			}
+		}
+	}
 }
 
 /* supprime du plateau toutes les pièces capturées */
 void removeCapture(jeu*g) {
-	// A ECRIRE S1
+	position p;
+	for (int i = 0; i < g->NB_Lig; i++){
+		for (int j = 0; j < g->NB_Col; j++){
+			p.lig = i;
+			p.col = j;
+			switch (getCaseVal(g, p)) {
+				//DNC=-4,DBC,PNC,PBC,VIDE,PB,PN,DB,DN
+				case DNC : case DBC : case PNC : case PBC : setCaseVal(g, p, VIDE); break;
+			}
+		}
+	}
 }
 
 /* retourne la position Voisine de p en avancant dans la direction donnee par dirlig dircol */

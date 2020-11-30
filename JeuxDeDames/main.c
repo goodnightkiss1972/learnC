@@ -153,6 +153,12 @@ void tests_S0(){
 	print_damier(g);
 	sleepcp(1500);
 
+	/* annulation de toutes les prises */
+	//undoCapture(g);
+	removeCapture(g);
+	resetTerm(); //permet de reinitialiser l'affichage du terminal
+	print_damier(g);
+	sleepcp(1500);
 
 	free(g->plateau); // pour eviter les fuites de memoire on libere g et son plateau
 	free(g);
