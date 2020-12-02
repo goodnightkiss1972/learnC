@@ -239,7 +239,30 @@ void removeCapture(jeu*g) {
 
 /* retourne la position Voisine de p en avancant dans la direction donnee par dirlig dircol */
 position posVoisine(position p, int dirlig, int dircol){
-	// A ECRIRE S1
+	/* hypotheses : on cherche le mouvement "juste" voisin (le plus proche) dans la direction indiquee */
+	/* si il n'y en a pas on renverra la position invalide -1, -1                                      */
+
+	/* traitement des cas particuliers des bordures ou des directions egales a la position             */
+	/* ou encore des directions invalides															   */
+	if ((dirlig == p.lig) || (dircol == p.col) || (dirlig < 0) || (dircol < 0) || (((dirlig + dircol) % 2) != 0)) {
+		return (position){-1,-1};
+	}
+	/* en haut a droite */
+	if ((dirlig > p.lig) && (dircol > p.col)) {
+		return (position){p.lig+1,p.col+1};
+	}
+	/* en haut a gauche */
+	if ((dirlig > p.lig) && (dircol < p.col)) {
+		return (position){p.lig+1,p.col-1};
+	}
+	/* en bas a droite */
+	if ((dirlig < p.lig) && (dircol > p.col)) {
+		return (position){p.lig-1,p.col+1};
+	}
+	/* en bas a gauche */
+	if ((dirlig < p.lig) && (dircol < p.col)) {
+		return (position){p.lig-1,p.col-1};
+	}
 	return (position){-1,-1};
 }
 

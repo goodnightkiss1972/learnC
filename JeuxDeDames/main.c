@@ -64,27 +64,40 @@ int test_valide(jeu* g,position p, int attendu) {
 	}
 }
 
+int test_posVoisine(position p, int dirlig, int dircol, position p_attendu){
+	position tested = posVoisine(p, dirlig, dircol);
+	if ((tested.lig == p_attendu.lig) && (tested.col == p_attendu.col)){
+		printf("test_posVoisine OK\n");
+		return 1;
+	}
+	else {
+		printf("** ERREUR test_posVoisine ** : La position voisine pour (%d %d) dans la direction (%d %d) n'est pas (%d %d) mais (%d %d).\n", p.lig, p.col, dirlig, dircol, p_attendu.lig, p_attendu.col, tested.lig, tested.col);
+		return 0;
+	}
+}
+
 /* un prog pour voir l'affichage d'un plateau avec les fonctions deja fournies 
  * Vous pouvez le tester de suite en compilant puis executant ce main
  * */
 void tests_S0(){
+	int tempo = 200;
 	jeu *g =calloc(1,sizeof(jeu));
 	//initBlank(g,12,12);
 	init(g,10,10,4);
 
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g); //afiche le damier de g dans le terminal
-	sleepcp(500);		// temporise pendant 500millisecondes
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 
 	setCaseVal(g,(position){1,1},PN); // ajout d'un pion noir	
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
-	sleepcp(500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 	
 	setCaseVal(g,(position){8,8},DB); // ajout d'une dame blanche	
 	resetTerm();
 	print_damier(g);
-	sleepcp(500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 	
 	setCaseVal(g,(position){3,3},DNC); // ajout d'une dame noir capturee
 	resetTerm();
@@ -111,54 +124,70 @@ void tests_S0(){
 	switchCapture(g, (position){3,3});
 	resetTerm();
 	print_damier(g);
-	sleepcp(500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 	switchCapture(g, (position){8,8});
 	resetTerm();
 	print_damier(g);
-	sleepcp(500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 
 	/* promotion noir */
 	setCaseVal(g,(position){0,8},PN); // ajout d'un pion noir	
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
-	sleepcp(1500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 	promotion(g);
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
-	sleepcp(500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 
 	/* promotion blanc */
 	setCaseVal(g,(position){9,9},PB); // ajout d'un pion blanc
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
-	sleepcp(1500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 	promotion(g);
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
-	sleepcp(500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 
 	/* mouvement simule */
 	doDeplace(g, (position){3,1}, (position){4,0});
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
-	sleepcp(1500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 
 	/* prise simulee */
 	setCaseVal(g,(position){4,6},PN); // ajout d'un pion noir
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
-	sleepcp(1500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 	doMange(g, (position){3,5}, (position){5,7}, (position){4,6});
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
-	sleepcp(1500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
 
 	/* annulation de toutes les prises */
 	//undoCapture(g);
 	removeCapture(g);
 	resetTerm(); //permet de reinitialiser l'affichage du terminal
 	print_damier(g);
-	sleepcp(1500);
+	sleepcp(tempo);		// temporise pendant 500millisecondes
+
+	/* test des positions voisines */
+	test_posVoisine((position){3,3},4,4,(position){4,4});
+	test_posVoisine((position){3,3},5,4,(position){-1,-1});
+	test_posVoisine((position){3,3},5,5,(position){4,4});
+	test_posVoisine((position){3,3},7,5,(position){4,4}); /* ;-) */
+	test_posVoisine((position){3,3},2,3,(position){-1,-1});
+	test_posVoisine((position){3,3},3,3,(position){-1,-1});
+	test_posVoisine((position){3,3},4,2,(position){4,2});
+	test_posVoisine((position){3,3},5,1,(position){4,2});
+
+	test_posVoisine((position){0,0},1,9,(position){1,1});
+	test_posVoisine((position){0,0},0,9,(position){-1,-1});
+	test_posVoisine((position){0,0},9,0,(position){-1,-1});
+	test_posVoisine((position){0,0},9,9,(position){1,1});
+
 
 	free(g->plateau); // pour eviter les fuites de memoire on libere g et son plateau
 	free(g);
