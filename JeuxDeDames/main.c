@@ -67,11 +67,28 @@ int test_valide(jeu* g,position p, int attendu) {
 int test_posVoisine(position p, int dirlig, int dircol, position p_attendu){
 	position tested = posVoisine(p, dirlig, dircol);
 	if ((tested.lig == p_attendu.lig) && (tested.col == p_attendu.col)){
-		printf("test_posVoisine OK\n");
+		//printf("test_posVoisine OK\n");
 		return 1;
 	}
 	else {
 		printf("** ERREUR test_posVoisine ** : La position voisine pour (%d %d) dans la direction (%d %d) n'est pas (%d %d) mais (%d %d).\n", p.lig, p.col, dirlig, dircol, p_attendu.lig, p_attendu.col, tested.lig, tested.col);
+		return 0;
+	}
+}
+
+int test_isMemeDiag(position p, position q, int attendu){
+	int resultat = isMemeDiag(p,q);
+	if (resultat == attendu) {
+		printf("test_isMemeDiag OK\n");
+		return 1;
+	}
+	else {
+		if (resultat == 1){
+			printf("** ERREUR test_isMemeDiag ** : Les positions (%d %d) et (%d %d) meme diagonale alors qu'on pensait que non !\n", p.lig, p.col, q.lig, q.col);
+		}
+		else{
+			printf("** ERREUR test_isMemeDiag ** : Les positions (%d %d) et (%d %d) pas sur meme diagonale alors qu'on pensait que si !\n", p.lig, p.col, q.lig, q.col);
+		}
 		return 0;
 	}
 }
@@ -187,6 +204,22 @@ void tests_S0(){
 	test_posVoisine((position){0,0},0,9,(position){-1,-1});
 	test_posVoisine((position){0,0},9,0,(position){-1,-1});
 	test_posVoisine((position){0,0},9,9,(position){1,1});
+
+	test_isMemeDiag((position){2,2},(position){2,2},1);
+	test_isMemeDiag((position){2,2},(position){3,3},1);
+	test_isMemeDiag((position){2,2},(position){1,1},1);
+	test_isMemeDiag((position){2,2},(position){4,4},1);
+	test_isMemeDiag((position){4,2},(position){4,2},1);
+	test_isMemeDiag((position){4,2},(position){5,3},1);
+	test_isMemeDiag((position){4,2},(position){3,1},1);
+	test_isMemeDiag((position){4,2},(position){6,4},1);
+
+	test_isMemeDiag((position){6,4},(position){6,6},0);
+	test_isMemeDiag((position){6,4},(position){2,4},0);
+	test_isMemeDiag((position){1,5},(position){6,2},0);
+	test_isMemeDiag((position){9,9},(position){0,2},0);
+
+	test_isMemeDiag((position){9,9},(position){11,11},1);
 
 
 	free(g->plateau); // pour eviter les fuites de memoire on libere g et son plateau

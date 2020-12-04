@@ -268,8 +268,29 @@ position posVoisine(position p, int dirlig, int dircol){
 
 /* retourne 1 si les deux positions p et q sont sur une même diagonale et 0 sinon */
 int isMemeDiag(position p, position q){
-	// A ECRIRE S1
-	return -1;
+	if (equals(p,q) == 1){
+		return 1; // est ce que deux points confondus sont alignes ? oui
+	}
+	position a = posVoisine(p, q.lig, q.col);
+	if (equals(a,q) == 1){
+		return 1; // en fait p et q etaient voisines
+	}
+	int move_lig = a.lig - p.lig; // doit etre 1 ou -1
+	int move_col = a.col - p.col; // doit etre 1 ou -1
+	/* une fois qu'on a ce move il ne doit plus changer jusqu'a atteindre q */
+	position b1 = {a.lig, a.col};
+	position b2;
+	while (!equals(b1,q)){
+		b2 = posVoisine(b1, q.lig, q.col);
+		// test si on a change de direction
+		if ((move_lig != (b2.lig - b1.lig)) || (move_col != (b2.col - b1.col))) {
+			return 0;
+		}
+		// on se prepare pour le mouvement suivant
+		b1.lig = b2.lig;
+		b1.col = b2.col;
+	}
+	return 1;
 }
 
 /* teste si le deplacement d'un pion de p vers q dans *g correspond à un mouvement sans prise valide*/
