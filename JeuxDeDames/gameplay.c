@@ -295,7 +295,12 @@ int isMemeDiag(position p, position q){
 
 /* teste si le deplacement d'un pion de p vers q dans *g correspond à un mouvement sans prise valide*/
 int isMoveElemPionValide(jeu*g, position p, position q){
-	// A ECRIRE S1
+	/* va retourner 1 si vrai, sinon 0		*/
+	/* pour etre valide sans prise :		*/
+	/* - p doit etre valide					*/
+	/* - q doit etre valide et vide			*/
+	/* - p et q doivent etre voisine		*/
+	/* - on doit bouger dans le bon sens ?	*/
 	return -1;		
 }
 
