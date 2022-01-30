@@ -33,3 +33,6 @@ gcc -o Test test.c -l cmocka
 # reste a comprendre concretement comment inclure nos tests dans un petit projet
 # et voir comment on lancer le programme ou les tests.
 
+# https://jagssoftware.wordpress.com/2018/02/20/cmocka-testing-framework-example/
+# https://git.cryptomilk.org/projects/cmocka.git/tree/example
+# https://www.linuxtut.com/en/c287eb805c7c56c88dbb/
