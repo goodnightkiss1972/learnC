@@ -1,0 +1,35 @@
+# Charenton le 30 janvier 2022
+
+# Comment installer cmocka
+# et apres comment l'utiliser
+
+# on peut travailler dans le repertoire des telechargements par exemple
+# on recupere le fichier avec la version voulue portant comme extension .tar.xz
+
+# on le decompresse comme ceci
+tar -xJf cmocka-1.1.5.tar.xz
+
+# du coup un repertoire cmocka-1.1.5 est crée
+# si je me souviens bien on rentre dedans puis on doit creer le sous repertoire "build"
+# ensuite on se deplace dans "cmake" il faudra lancer la commande
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug ..
+
+# puis
+make
+
+# et enfin
+make install
+
+# a ce stade la librairie cmocka est installee dans linux
+
+# on peut aller dans exemple1, pour compiler un test on fait
+gcc -o Test test.c -l cmocka
+
+# il ne reste plus qu'a lancer
+./Test
+
+# et on voit un rapport de test
+
+# reste a comprendre concretement comment inclure nos tests dans un petit projet
+# et voir comment on lancer le programme ou les tests.
+
