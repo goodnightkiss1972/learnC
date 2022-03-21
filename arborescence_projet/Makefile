@@ -15,7 +15,7 @@ all: $(EXEC)
 hello: hello.o main.o
 	$(CC) -o $@ $^
 
-hello.o : hello.c
+%.o : %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 main.o : main.c hello.h
