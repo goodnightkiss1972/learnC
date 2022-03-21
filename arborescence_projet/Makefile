@@ -2,6 +2,8 @@
 CC=gcc
 CFLAGS=-W -Wall -ansi -pedantic
 EXEC=hello
+SRC=hello.c main.c
+OBJ=$(SRC:.c=.o)
 
 # "$@" le nom de la cible
 # "$<" le nom de la premiere dependance
@@ -12,13 +14,10 @@ EXEC=hello
 #cibles : dependances & regles (a la ligne avec un TAB)
 all: $(EXEC)
 
-hello: hello.o main.o
+hello: $(OBJ)
 	$(CC) -o $@ $^
 
 %.o : %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
-
-main.o : main.c hello.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
