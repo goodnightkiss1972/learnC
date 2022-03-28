@@ -1,0 +1,17 @@
+Determining if the include file io.h exists failed with the following output:
+Change Dir: /home/fabien/Documents/github/goodnightkiss1972/learnC/tdd/cmocka_ubuntu/cmocka-1.1.5/cmake/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_b262e/fast && /usr/bin/make  -f CMakeFiles/cmTC_b262e.dir/build.make CMakeFiles/cmTC_b262e.dir/build
+make[1] : on entre dans le répertoire « /home/fabien/Documents/github/goodnightkiss1972/learnC/tdd/cmocka_ubuntu/cmocka-1.1.5/cmake/CMakeFiles/CMakeTmp »
+Building C object CMakeFiles/cmTC_b262e.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -fPIE -o CMakeFiles/cmTC_b262e.dir/CheckIncludeFile.c.o -c /home/fabien/Documents/github/goodnightkiss1972/learnC/tdd/cmocka_ubuntu/cmocka-1.1.5/cmake/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/fabien/Documents/github/goodnightkiss1972/learnC/tdd/cmocka_ubuntu/cmocka-1.1.5/cmake/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: io.h: Aucun fichier ou dossier de ce type
+    1 | #include <io.h>
+      |          ^~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_b262e.dir/build.make:78 : CMakeFiles/cmTC_b262e.dir/CheckIncludeFile.c.o] Erreur 1
+make[1] : on quitte le répertoire « /home/fabien/Documents/github/goodnightkiss1972/learnC/tdd/cmocka_ubuntu/cmocka-1.1.5/cmake/CMakeFiles/CMakeTmp »
+make: *** [Makefile:127 : cmTC_b262e/fast] Erreur 2
+
+
+

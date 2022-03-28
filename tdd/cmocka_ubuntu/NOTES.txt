@@ -1,0 +1,56 @@
+# Charenton le 06 fevrier 2022 (ordi blanc de fab)
+
+# Comment installer cmocka
+# et apres comment l'utiliser
+
+# on peut travailler dans le repertoire des telechargements par exemple
+# on recupere le fichier avec la version voulue portant comme extension .tar.xz
+
+# on le decompresse comme ceci
+tar -xJf cmocka-1.1.5.tar.xz
+
+# du coup un repertoire cmocka-1.1.5 est crée
+# si je me souviens bien on rentre dedans puis on doit creer le sous repertoire "build"
+
+# ensuite on se deplace dans "cmake" il faudra lancer la commande
+sudo snap install cmake --classic # uniquement si cmake n'est pas deja installe
+sudo apt install make # uniquement si make n'est pas deja installe
+
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug ..
+
+-- Build files have been written to: /home/fabien/Documents/github/goodnightkiss1972/learnC/tdd/cmocka_ubuntu/cmocka-1.1.5/cmake
+
+# puis
+make
+
+# et enfin
+make install # plutot sudo make install
+
+Install the project...
+-- Install configuration: "Debug"
+-- Installing: /usr/lib/x86_64-linux-gnu/pkgconfig/cmocka.pc
+-- Installing: /usr/lib/x86_64-linux-gnu/cmake/cmocka/cmocka-config.cmake
+-- Installing: /usr/lib/x86_64-linux-gnu/cmake/cmocka/cmocka-config-version.cmake
+-- Installing: /usr/include/cmocka.h
+-- Installing: /usr/include/cmocka_pbc.h
+-- Installing: /usr/lib/x86_64-linux-gnu/libcmocka.so.0.7.0
+-- Installing: /usr/lib/x86_64-linux-gnu/libcmocka.so.0
+-- Installing: /usr/lib/x86_64-linux-gnu/libcmocka.so
+
+
+# a ce stade la librairie cmocka est installee dans linux
+
+# on peut aller dans exemple1, pour compiler un test on fait
+gcc -o Test test.c -l cmocka
+
+# il ne reste plus qu'a lancer
+./Test
+
+# et on voit un rapport de test
+
+# reste a comprendre concretement comment inclure nos tests dans un petit projet
+# et voir comment on lancer le programme ou les tests.
+
+# https://jagssoftware.wordpress.com/2018/02/20/cmocka-testing-framework-example/
+# https://git.cryptomilk.org/projects/cmocka.git/tree/example
+# https://www.linuxtut.com/en/c287eb805c7c56c88dbb/
