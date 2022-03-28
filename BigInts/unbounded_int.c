@@ -6,20 +6,50 @@
 unbounded_int string2unbounded_int(const char *e)
 {
     unbounded_int *unbi = malloc(sizeof(unbounded_int));
-    
-    /* determination du signe */
-    unbi->signe = '+';
-    
-    int i = 0;
+
+    /* il faudra gerer le cas de la chaine vide */
+
+    printf("\n **** DETECTION [%s] **** \n", e);
+    if (*e == '-')
+    {
+        printf("NEGATIF\n");
+        unbi->signe = '-';
+        e++;
+    }
+    else
+    {
+        printf("POSITIF\n");
+        unbi->signe = '+';
+    }
+
+    int position_apres_signe = 0;
     while (*e != '\0')
     {
-        printf("caractere %c\n", *e);
-        e++;
-        i++;
+        /* si la chaine ne represente qu'un seul chiffre il faut l'inserer en DERNIER */
+        if (*(e + 1) == '\0')
+        {
+            printf("DERNIER       %c\n", *e);
+            e++;
+            position_apres_signe++;
+            continue;
+        }
+        else if (position_apres_signe == 0) {
+            printf("PREMIER       %c\n", *e);
+            e++;
+            position_apres_signe++;
+            continue;
+        }
+        if (position_apres_signe >= 1 && *(e + 1) != '\0')
+        {
+            printf("MILIEU        %c\n", *e);
+            e++;
+            position_apres_signe++;
+            continue;
+        }
     }
 
     /* affectation de la taille */
-    unbi->len = i;
+    unbi->len = position_apres_signe;
 
     return *unbi;
 }
