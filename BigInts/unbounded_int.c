@@ -9,6 +9,8 @@
 
 #define DEBUGAGE false
 
+static unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi);
+
 unbounded_int string2unbounded_int(const char *e)
 {
     unbounded_int *unbi = (unbounded_int *)malloc(sizeof(unbounded_int));
@@ -74,7 +76,7 @@ char *unbounded_int2string(const unbounded_int *unbi)
     return s;
 }
 
-unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi)
+static unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi)
 {
     /*  ALGORITHME
 
@@ -142,20 +144,4 @@ unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi)
     unbi->len++; /* increment de la taille */
 
     return *unbi;
-}
-
-void affiche_unbounded_int(unbounded_int *unbi)
-{
-    if (unbi == NULL) {
-        return;
-    }
-    printf("%c", unbi->signe);
-    chiffre *chui = malloc(sizeof(chiffre));
-    chui = unbi->premier;
-    while (chui != NULL)
-    {
-        printf("%c", chui->c);
-        chui = chui->suivant;
-    }
-    free(chui);
 }

@@ -22,5 +22,3 @@ https://en.wikipedia.org/wiki/C_data_types#stddef.h
 unbounded_int string2unbounded_int(const char *e);
 char *unbounded_int2string(const unbounded_int *unbi);
 
-unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi);
-void affiche_unbounded_int(unbounded_int *unbi);

@@ -7,6 +7,7 @@
 
 #define DEBUGAGE false
 
+void affiche_unbounded_int(unbounded_int *unbi);
 void test_string2unbounded_int(const char *test, const char signe_attendu, const int len_attendu);
 void test_unbounded_int2string(const char *test, const char *attendu);
 
@@ -40,6 +41,22 @@ int main(void)
     printf("*    TESTS OK    *\n");
     printf("******************\n");
     return 0;
+}
+
+void affiche_unbounded_int(unbounded_int *unbi)
+{
+    if (unbi == NULL) {
+        return;
+    }
+    printf("%c", unbi->signe);
+    chiffre *chui = malloc(sizeof(chiffre));
+    chui = unbi->premier;
+    while (chui != NULL)
+    {
+        printf("%c", chui->c);
+        chui = chui->suivant;
+    }
+    free(chui);
 }
 
 void test_string2unbounded_int(const char *test, const char signe_attendu, const int len_attendu)
