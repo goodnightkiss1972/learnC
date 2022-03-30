@@ -7,7 +7,7 @@
 
 #include "unbounded_int.h"
 
-#define DEBUGAGE true
+#define DEBUGAGE false
 
 unbounded_int string2unbounded_int(const char *e)
 {
@@ -16,7 +16,7 @@ unbounded_int string2unbounded_int(const char *e)
     /* il faudra gerer le cas de la chaine vide */
 
     if (DEBUGAGE)
-        printf("\n **** string2unbounded_int [%s] **** ", e);
+        printf("**** string2unbounded_int [%s] **** ", e);
     if (*e == '-')
     {
         if (DEBUGAGE)
@@ -52,26 +52,26 @@ char *unbounded_int2string(const unbounded_int *unbi)
         return NULL;
     }
 
-    if (DEBUGAGE)
-        printf("Affichage   ");
-    if (unbi->signe == '-')
+    char *s = malloc((unbi->len + 1) * sizeof(char));
+    s[0] = unbi->signe;
+
+    int i = 1;
+    chiffre *chui = malloc(sizeof(chiffre));
+    chui = unbi->premier;
+    while (chui != NULL)
     {
-        if (DEBUGAGE)
-            printf("%c", unbi->signe);
+        s[i] = chui->c;
+        chui = chui->suivant;
+        i++;
     }
 
-    chiffre *encours = (chiffre *)malloc(sizeof(chiffre));
-    encours = unbi->premier;
-
-    for (size_t i = 0; i < unbi->len; i++)
-    {
-        if (DEBUGAGE)
-            printf("%c", encours->c);
-        encours = encours->suivant;
-    }
     if (DEBUGAGE)
-        printf("\n");
-    return "ABC";
+    {
+        printf("\n**** unbounded_int2string() = %s ****", s);
+    }
+
+    free(chui);
+    return s;
 }
 
 unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi)
@@ -142,4 +142,20 @@ unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi)
     unbi->len++; /* increment de la taille */
 
     return *unbi;
+}
+
+void affiche_unbounded_int(unbounded_int *unbi)
+{
+    if (unbi == NULL) {
+        return;
+    }
+    printf("%c", unbi->signe);
+    chiffre *chui = malloc(sizeof(chiffre));
+    chui = unbi->premier;
+    while (chui != NULL)
+    {
+        printf("%c", chui->c);
+        chui = chui->suivant;
+    }
+    free(chui);
 }
