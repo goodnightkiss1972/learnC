@@ -1,6 +1,6 @@
 # Variables internes (compilateur et ses flags)
 CC=gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -g -pedantic
 EXEC=unbounded_int
 SRC=unbounded_int.c main.c
 OBJ=$(SRC:.c=.o)
