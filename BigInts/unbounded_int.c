@@ -1,6 +1,5 @@
 /* https://www.ltam.lu/Tutoriel-Ansi-C/prg-c98.htm */
 
-
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -16,51 +15,28 @@ unbounded_int string2unbounded_int(const char *e)
 
     /* il faudra gerer le cas de la chaine vide */
 
-    if (DEBUGAGE) printf("\n **** DETECTION [%s] **** \n", e);
+    if (DEBUGAGE)
+        printf("\n **** string2unbounded_int [%s] **** ", e);
     if (*e == '-')
     {
-        if (DEBUGAGE) printf("NEGATIF\n");
+        if (DEBUGAGE)
+            printf("NEGATIF ");
         unbi->signe = '-';
         e++;
     }
     else
     {
-        if (DEBUGAGE) printf("POSITIF\n");
+        if (DEBUGAGE)
+            printf("POSITIF ");
         unbi->signe = '+';
     }
 
-    int position_apres_signe = 0;
     while (*e != '\0')
     {
         /* si la chaine ne represente qu'un seul chiffre il faut l'inserer en DERNIER */
-        if (*(e + 1) == '\0')
-        {
-            if (DEBUGAGE) printf("DERNIER       %c\n", *e);
-            *unbi = ajouter_1chiffre_a_la_fin(*e, unbi);
-            e++;
-            position_apres_signe++;
-            continue;
-        }
-        else if (position_apres_signe == 0)
-        {
-            if (DEBUGAGE) printf("PREMIER       %c\n", *e);
-            *unbi = ajouter_1chiffre_a_la_fin(*e, unbi);
-            e++;
-            position_apres_signe++;
-            continue;
-        }
-        if (position_apres_signe >= 1 && *(e + 1) != '\0')
-        {
-            if (DEBUGAGE) printf("MILIEU        %c\n", *e);
-            *unbi = ajouter_1chiffre_a_la_fin(*e, unbi);
-            e++;
-            position_apres_signe++;
-            continue;
-        }
+        *unbi = ajouter_1chiffre_a_la_fin(*e, unbi);
+        e++;
     }
-
-    /* affectation de la taille */
-    unbi->len = position_apres_signe;
 
     return *unbi;
 }
@@ -76,10 +52,12 @@ char *unbounded_int2string(const unbounded_int *unbi)
         return NULL;
     }
 
-    if (DEBUGAGE) printf("Affichage   ");
+    if (DEBUGAGE)
+        printf("Affichage   ");
     if (unbi->signe == '-')
     {
-        if (DEBUGAGE) printf("%c", unbi->signe);
+        if (DEBUGAGE)
+            printf("%c", unbi->signe);
     }
 
     chiffre *encours = (chiffre *)malloc(sizeof(chiffre));
@@ -87,10 +65,12 @@ char *unbounded_int2string(const unbounded_int *unbi)
 
     for (size_t i = 0; i < unbi->len; i++)
     {
-        if (DEBUGAGE) printf("%c", encours->c);
+        if (DEBUGAGE)
+            printf("%c", encours->c);
         encours = encours->suivant;
     }
-    if (DEBUGAGE) printf("\n");
+    if (DEBUGAGE)
+        printf("\n");
     return "ABC";
 }
 
@@ -140,9 +120,10 @@ unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi)
     {
         /* il faut declarer unbi comme incorrect */
         unbi->signe = '*';
+        return *unbi;
     }
 
-    nouveau->c = ch;
+    nouveau->c = ch;         /* affectation du chiffre lui même */
     nouveau->suivant = NULL; /* pas de suivant car on ajoute a la fin de la liste */
 
     if (unbi->premier == NULL && unbi->dernier == NULL) /* si la liste est vide */
@@ -157,6 +138,8 @@ unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi)
         unbi->dernier->suivant = nouveau;
         unbi->dernier = nouveau;
     }
+
+    unbi->len++; /* increment de la taille */
 
     return *unbi;
 }
