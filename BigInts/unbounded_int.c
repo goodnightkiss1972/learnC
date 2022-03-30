@@ -1,27 +1,31 @@
 /* https://www.ltam.lu/Tutoriel-Ansi-C/prg-c98.htm */
 
+
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "unbounded_int.h"
 
+#define DEBUGAGE true
+
 unbounded_int string2unbounded_int(const char *e)
 {
-    unbounded_int *unbi = (unbounded_int*)malloc(sizeof(unbounded_int));
+    unbounded_int *unbi = (unbounded_int *)malloc(sizeof(unbounded_int));
 
     /* il faudra gerer le cas de la chaine vide */
 
-    printf("\n **** DETECTION [%s] **** \n", e);
+    if (DEBUGAGE) printf("\n **** DETECTION [%s] **** \n", e);
     if (*e == '-')
     {
-        printf("NEGATIF\n");
+        if (DEBUGAGE) printf("NEGATIF\n");
         unbi->signe = '-';
         e++;
     }
     else
     {
-        printf("POSITIF\n");
+        if (DEBUGAGE) printf("POSITIF\n");
         unbi->signe = '+';
     }
 
@@ -31,27 +35,24 @@ unbounded_int string2unbounded_int(const char *e)
         /* si la chaine ne represente qu'un seul chiffre il faut l'inserer en DERNIER */
         if (*(e + 1) == '\0')
         {
-            printf("DERNIER       %c\n", *e);
-            *unbi = ajouter1chiffre(*e, unbi);
-            //printf(" # suivant = %x # precedent = %x\n", encours->suivant, encours->precedent);
+            if (DEBUGAGE) printf("DERNIER       %c\n", *e);
+            *unbi = ajouter_1chiffre_a_la_fin(*e, unbi);
             e++;
             position_apres_signe++;
             continue;
         }
         else if (position_apres_signe == 0)
         {
-            printf("PREMIER       %c\n", *e);
-            *unbi = ajouter1chiffre(*e, unbi);
-            //printf(" # suivant = %x # precedent = %x\n", encours->suivant, encours->precedent);
+            if (DEBUGAGE) printf("PREMIER       %c\n", *e);
+            *unbi = ajouter_1chiffre_a_la_fin(*e, unbi);
             e++;
             position_apres_signe++;
             continue;
         }
         if (position_apres_signe >= 1 && *(e + 1) != '\0')
         {
-            printf("MILIEU        %c\n", *e);
-            *unbi = ajouter1chiffre(*e, unbi);
-            //printf(" # suivant = %x # precedent = %x\n", encours->suivant, encours->precedent);
+            if (DEBUGAGE) printf("MILIEU        %c\n", *e);
+            *unbi = ajouter_1chiffre_a_la_fin(*e, unbi);
             e++;
             position_apres_signe++;
             continue;
@@ -75,47 +76,85 @@ char *unbounded_int2string(const unbounded_int *unbi)
         return NULL;
     }
 
-    printf("Affichage   ");
+    if (DEBUGAGE) printf("Affichage   ");
     if (unbi->signe == '-')
     {
-        printf("%c", unbi->signe);
+        if (DEBUGAGE) printf("%c", unbi->signe);
     }
 
-    chiffre *encours = (chiffre*)malloc(sizeof(chiffre));
+    chiffre *encours = (chiffre *)malloc(sizeof(chiffre));
     encours = unbi->premier;
 
-    for (size_t i = 1; i < unbi->len; i++)
+    for (size_t i = 0; i < unbi->len; i++)
     {
-        printf("%c", encours->c);
+        if (DEBUGAGE) printf("%c", encours->c);
         encours = encours->suivant;
     }
-    printf("\n");
+    if (DEBUGAGE) printf("\n");
     return "ABC";
 }
 
-unbounded_int ajouter1chiffre(const char ch, unbounded_int *unbi)
+unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi)
 {
+    /*  ALGORITHME
+
+        ABCDEFGHIJ
+        1234478909
+
+        cas particulier dans le premier terme de la liste (hors signe)
+
+        creer 1 > A { precedent = NULL, suivant = NULL }
+        modifier UNBI premier = nouveau (A), dernier = nouveau (A)
+
+        A (precedent = NULL, suivant = NULL)
+        premier = A
+        dernier = A
+
+        *********
+
+        creer 2 > B { precedent = dernier (A), suivant = NULL }
+        modifier dernier (A) {precedent = inchangé, suivant = nouveau (B)}
+        modifier UNBI dernier = nouveau (B)
+
+        A (precedent = NULL, suivant = B)
+        B (precedent = A, suivant = NULL
+        premier = A
+        dernier = B
+
+        *********
+
+        creer 3 > C { precedent = dernier (B), suivant = NULL }
+        modifier dernier (B) {precedent = inchangé, suivant = nouveau (C)}
+        modifier UNBI dernier = nouveau (C)
+
+        A (precedent = NULL, suivant = B)
+        B (precedent = A, suivant = C
+        C (precedent = B, suivant = NULL)
+        premier = A
+        dernier = C
+
+        etc.
+    */
     chiffre *nouveau = malloc(sizeof(chiffre));
-    if isdigit (ch)
-    {
-        nouveau->c = ch;
-    }
-    else
+    if (!isdigit(ch))
     {
         /* il faut declarer unbi comme incorrect */
         unbi->signe = '*';
     }
+
     nouveau->c = ch;
-    nouveau->suivant = NULL;
-    if (unbi->dernier == NULL) {
+    nouveau->suivant = NULL; /* pas de suivant car on ajoute a la fin de la liste */
+
+    if (unbi->premier == NULL && unbi->dernier == NULL) /* si la liste est vide */
+    {
         nouveau->precedent = NULL;
         unbi->premier = nouveau;
         unbi->dernier = nouveau;
     }
     else
     {
-        unbi->dernier->suivant = nouveau;
         nouveau->precedent = unbi->dernier;
+        unbi->dernier->suivant = nouveau;
         unbi->dernier = nouveau;
     }
 
