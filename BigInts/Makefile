@@ -2,8 +2,6 @@
 CC=gcc
 CFLAGS=-Wall
 EXEC=unbounded_int_test calc_unbounded_int
-#SRC=unbounded_int.c unbounded_int_test.c
-#OBJ=$(SRC:.c=.o)
 
 # "$@" le nom de la cible
 # "$<" le nom de la premiere dependance
