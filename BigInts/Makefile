@@ -1,9 +1,9 @@
 # Variables internes (compilateur et ses flags)
 CC=gcc
 CFLAGS=-Wall
-EXEC=unbounded_int
-SRC=unbounded_int.c main.c
-OBJ=$(SRC:.c=.o)
+EXEC=unbounded_int_test calc_unbounded_int
+#SRC=unbounded_int.c unbounded_int_test.c
+#OBJ=$(SRC:.c=.o)
 
 # "$@" le nom de la cible
 # "$<" le nom de la premiere dependance
@@ -14,7 +14,10 @@ OBJ=$(SRC:.c=.o)
 #cibles : dependances & regles (a la ligne avec un TAB)
 all: $(EXEC)
 
-unbounded_int: $(OBJ)
+unbounded_int_test: unbounded_int.o unbounded_int_test.o
+	$(CC) -o $@ $^
+
+calc_unbounded_int: unbounded_int.o calc_unbounded_int.o
 	$(CC) -o $@ $^
 
 %.o : %.c

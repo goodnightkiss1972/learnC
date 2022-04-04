@@ -1,4 +1,4 @@
 clear
 make mrproper
 make
-./unbounded_int
+./unbounded_int_test
