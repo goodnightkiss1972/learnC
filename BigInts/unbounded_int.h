@@ -19,6 +19,10 @@ typedef struct
 https://en.wikipedia.org/wiki/C_data_types#stddef.h
 */
 
+
+
+
 unbounded_int string2unbounded_int(const char *e);
+
 char *unbounded_int2string(const unbounded_int *unbi);
 

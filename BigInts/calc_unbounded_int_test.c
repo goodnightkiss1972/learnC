@@ -1,11 +1,15 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <assert.h>
+#include <stdbool.h>
 
 #include "unbounded_int.h"
 #include "calc_unbounded_int_lib.h"
 
-/* https://yard.onl/sitelycee/cours/c/Ouvriretfermerunfichier.html */
+#define DEBUGAGE false
+
+void test_fichier_input();
+void test_fichier_output();
 
 int main(int argc, char *argv[])
 {
@@ -17,4 +21,3 @@ int main(int argc, char *argv[])
 //    if (fopen(fichier_resultat, "r") != NULL) fclose(fichier_resultat);
     return 0;
 }
-

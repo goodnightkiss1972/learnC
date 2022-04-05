@@ -9,6 +9,17 @@
 
 #define DEBUGAGE false
 
+
+
+
+
+
+
+
+
+
+
+
 static unbounded_int ajouter_1chiffre_a_la_fin(const char ch, unbounded_int *unbi);
 
 unbounded_int string2unbounded_int(const char *e)
