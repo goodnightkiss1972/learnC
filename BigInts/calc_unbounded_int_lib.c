@@ -70,3 +70,19 @@ FILE *ouvre_fichier_ecriture(char *argument) {
     }
     return fichier; 
 }
+
+void lire_ligne_source() {
+    /* l'idee serait de lire le fichier source ligne par ligne          */
+    /* a chaque ligne il y aurait une et une seule action identifiee    */
+    /* 1- une declaration                    abc = 1234567890987654321  */
+    /* 2- une operation sur les declarations a = a * 2                  */
+    /* 3- un affichage en sortie             print a                    */
+
+    /* le premier mot est soit une variable soit print                                */
+    /* apres une variable il doit forcement y avoir un =                              */
+    /* apres un egal soit un chiffre unbounded_int                                    */
+    /*               soit une autre variable                                          */
+    /*                     dans ce dernier cas on cherche une operation +, - ou *     */
+    /*                     puis encore une variable ou un unbounded_int               */
+    /* si le premier mot est print alors on cherche une variable.                     */
+}
