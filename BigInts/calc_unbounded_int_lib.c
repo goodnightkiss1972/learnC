@@ -50,7 +50,7 @@ void initialise(int argc, char *argv[])
 FILE *ouvre_fichier_lecture(char *argument) {
     FILE *fichier = fopen(argument, "r");
     if (fichier != NULL) {
-        printf("OK     : tout va bien on a trouve le fichier %s \n", argument);
+        //printf("OK     : tout va bien on a trouve le fichier %s \n", argument);
     }
     else {
         printf("ERREUR : impossible d'ouvrir le fichier %s\n", argument);
@@ -62,7 +62,7 @@ FILE *ouvre_fichier_lecture(char *argument) {
 FILE *ouvre_fichier_ecriture(char *argument) {
     FILE *fichier = fopen(argument, "w");
     if (fichier != NULL) {
-        printf("OK     : tout va bien on a trouve le fichier %s \n", argument);
+        //printf("OK     : tout va bien on a trouve le fichier %s \n", argument);
     }
     else {
         printf("ERREUR : impossible d'ouvrir le fichier %s\n", argument);
@@ -85,4 +85,6 @@ void lire_ligne_source() {
     /*                     dans ce dernier cas on cherche une operation +, - ou *     */
     /*                     puis encore une variable ou un unbounded_int               */
     /* si le premier mot est print alors on cherche une variable.                     */
+    /*                                                                                */
+    /* condition : une variable ne peut pas commencer par un chiffre                  */
 }

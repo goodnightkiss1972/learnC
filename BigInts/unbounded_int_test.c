@@ -14,6 +14,10 @@ void test_unbounded_int2string(const char *test, const char *attendu);
 int main(void)
 {
     printf("\n");
+    printf("******************\n");
+    printf("*  LIB TESTS :   *\n");
+    printf("******************\n");
+
     test_string2unbounded_int("1", '+', 1);
     test_string2unbounded_int("-1", '-', 1);
     test_string2unbounded_int("120943834954059", '+', 15);
@@ -36,9 +40,8 @@ int main(void)
     test_unbounded_int2string("120943834954059", "+120943834954059");
     test_unbounded_int2string("-1000012244343", "-1000012244343");
 
-    printf("\n");
     printf("******************\n");
-    printf("*    TESTS OK    *\n");
+    printf("*  LIB TESTS OK  *\n");
     printf("******************\n");
     return 0;
 }
