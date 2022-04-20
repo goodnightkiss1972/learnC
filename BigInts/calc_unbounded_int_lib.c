@@ -31,7 +31,8 @@ void initialise(int argc, char *argv[])
         }
         if (strcmp(argv[3-2], "-o") == 0) {
             printf("Resultat == %s\n", argv[3-1]);
-            fichier_resultat = ouvre_fichier_ecriture(argv[3-1]);
+            fichier_resultat = ouvre_fichier_lecture(argv[3-1]);
+//            fichier_resultat = ouvre_fichier_ecriture(argv[3-1]);
         }
     }
     if (argc == 5)
@@ -42,7 +43,8 @@ void initialise(int argc, char *argv[])
         }
         if (strcmp(argv[5-2], "-o") == 0) {
             printf("Resultat == %s\n", argv[5-1]);
-            fichier_resultat = ouvre_fichier_ecriture(argv[5-1]);
+            fichier_resultat = ouvre_fichier_lecture(argv[5-1]);
+//            fichier_resultat = ouvre_fichier_ecriture(argv[3-1]);
         }
     }
 }

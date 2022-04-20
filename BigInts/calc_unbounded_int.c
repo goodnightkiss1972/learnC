@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
     initialise(argc, argv);
 
 
-//    if (fopen(fichier_source, "r") != NULL) fclose(fichier_source);
-//    if (fopen(fichier_resultat, "r") != NULL) fclose(fichier_resultat);
+    fclose(fichier_source);
+    fclose(fichier_resultat);
     return 0;
 }
 
